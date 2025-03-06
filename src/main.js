@@ -2,6 +2,7 @@ import SortView from './view/sort-view.js';
 import FilterView from './view/filter-view.js';
 import {render} from './render.js';
 import BoardPointsPresenter from './presenter/board-points-presenter.js';
+import PointsModel from './model/point-model.js';
 
 const body = document.body;
 
@@ -15,7 +16,11 @@ const containerTripEvents = siteMainElement.querySelector('.trip-events');
 
 render(new SortView(), containerTripEvents);
 
-const boardPointsPresenter = new BoardPointsPresenter({boardPointsContainer: containerTripEvents});
+const pointsModel = new PointsModel();
+const boardPointsPresenter = new BoardPointsPresenter({
+  boardPointsContainer: containerTripEvents,
+  pointsModel,
+});
 
 boardPointsPresenter.init();
 
