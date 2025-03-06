@@ -1,4 +1,4 @@
-import { getRandomInteger, createIdGenerator } from '../util.js';
+import { getRandomInteger, createIdGenerator, getRandomArrayElement } from '../util.js';
 import { POINTS_COUNT, TYPES } from './const.js';
 import { offersCollId } from './offer.js';
 
@@ -18,4 +18,10 @@ const createPoint = () => ({
 
 const mockPoints = Array.from({length: POINTS_COUNT}, createPoint);
 
-JSON.stringify(mockPoints, null, 2);
+// JSON.stringify(mockPoints, null, 2);
+
+function getRandomPoint() {
+  return getRandomArrayElement(mockPoints);
+}
+
+export {getRandomPoint};
