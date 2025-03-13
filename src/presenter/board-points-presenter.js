@@ -9,6 +9,7 @@ export default class BoardPointsPresenter {
   pointListComponent = new PointListView();
 
   constructor({boardPointsContainer, pointsModel}) {
+    //console.log('pointsModl=', pointsModel);
     this.boardPointsContainer = boardPointsContainer;
     this.pointsModel = pointsModel;
   }
@@ -24,7 +25,10 @@ export default class BoardPointsPresenter {
     render(new PointEditView(), this.pointListComponent.getElement());
 
     for (let i = 0; i < this.boardPoints.length; i++) {
+      console.log('i=', i);
+      //console.log(this.pointListComponent.getElement());
       render(new PointView({point: this.boardPoints[i]}), this.pointListComponent.getElement());
+      //console.log(new PointView({point: this.boardPoints[i]}));
     }
   }
 }
