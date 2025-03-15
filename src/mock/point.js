@@ -13,7 +13,7 @@ const createPoint = () => ({
   'destination': generateCityId(),
   'is_favorite': false,
   'offers': offersCollId(), //['1', '2', ]
-  'type': TYPES[getRandomInteger(0, TYPES.length)],
+  'type': TYPES[getRandomInteger(0, TYPES.length - 1)],
 });
 
 const mockPoints = Array.from({length: POINTS_COUNT}, createPoint);
@@ -21,7 +21,9 @@ const mockPoints = Array.from({length: POINTS_COUNT}, createPoint);
 // JSON.stringify(mockPoints, null, 2);
 
 function getRandomPoint() {
+  console.log(mockPoints);
   return getRandomArrayElement(mockPoints);
+
 }
 
-export {getRandomPoint};
+export { getRandomPoint };

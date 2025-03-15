@@ -1,22 +1,43 @@
-import {createElement} from '../render.js';
+import { createElement } from '../render.js';
+import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT } from '../util.js';
+//import { mockDestinations } from '../mock/destination.js';
+import { descriptionData } from '../mock/destination.js';
 
-function createPointTemplate() {
+//const descriptionData = mockDestinations();
+
+function createPointTemplate(point) {
+  const {base_price: price, date_from: dateFrom, date_to: dateTo, destination, id, is_favorite: isFavorite, offers, type} = point;
+  console.log(point);
+
+  const dateStart = humanizePointDate(dateFrom, DATE_FORMAT);
+  const dateEnd = humanizePointDate(dateTo, DATE_FORMAT);
+  const timeStart = humanizePointDate(dateFrom, TIME_FORMAT);
+  const timeEnd = humanizePointDate(dateTo, TIME_FORMAT);
+  const dateTimeStart = humanizePointDate(dateFrom, DATETIME_FORMAT);
+  const dateTimeEnd = humanizePointDate(dateTo, DATETIME_FORMAT);
+
+  //const description = let cityId = cities.find(city => city.name === searchTerm).id
+  const destinationName = descriptionData.find((item) => item.id === destination).name;
+  //console.log(destinationName);
+
+  //const offers = () => {};
+
   return `<li class="trip-events__item">
             <div class="event">
-              <time class="event__date" datetime="2019-03-18"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">18 МАР</font></font></time>
+              <time class="event__date" datetime="${dateStart}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${dateStart}</font></font></time>
               <div class="event__type">
-                <img class="event__type-icon" width="42" height="42" src="img/icons/flight.png" alt="Значок типа события">
+                <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Значок типа события">
               </div>
-              <h3 class="event__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Рейс Шамони</font></font></h3>
+              <h3 class="event__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${type} ${destinationName}</font></font></h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="2019-03-18T12:25"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">12:25</font></font></time><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                  <time class="event__start-time" datetime="${dateTimeStart}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${timeStart}</font></font></time><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
                   —
-                  </font></font><time class="event__end-time" datetime="2019-03-18T13:35"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">13:35</font></font></time>
+                  </font></font><time class="event__end-time" datetime="${dateTimeEnd}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${timeEnd}</font></font></time>
                 </p>
                 <p class="event__duration"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">01Ч 10М</font></font></p>
               </div>
-              <p class="event__price"><font style="vertical-align: inherit;"><span class="event__price-value"><font style="vertical-align: inherit;">160</font></span><font style="vertical-align: inherit;">
+              <p class="event__price"><font style="vertical-align: inherit;"><span class="event__price-value"><font style="vertical-align: inherit;">${price}</font></span><font style="vertical-align: inherit;">
                 евро&nbsp;</font></font><span class="event__price-value"><font style="vertical-align: inherit;"></font></span>
               </p>
               <h4 class="visually-hidden"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Предложения:</font></font></h4>
@@ -46,8 +67,12 @@ function createPointTemplate() {
 }
 
 export default class PointView {
+  constructor({point}) {
+    this.point = point;
+  }
+
   getTemplate() {
-    return createPointTemplate();
+    return createPointTemplate(this.point);
   }
 
   getElement() {

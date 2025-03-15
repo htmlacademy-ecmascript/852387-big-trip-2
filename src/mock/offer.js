@@ -1,11 +1,11 @@
-import { getRandomInteger, createIdGenerator } from '../util.js';
-import { OFFERS_COUNT, TYPES } from './const.js';
+import { getRandomInteger, createIdGenerator, getRandomArrayElement, getIdList } from '../util.js';
+import { OFFERS_COUNT, TYPES, TITLE_OFFERS } from './const.js';
 
 const generateOfferId = createIdGenerator();
 
 const createOffer = () => ({
   'id': generateOfferId(),
-  'title': 'Upgrade to a business class',
+  'title': getRandomArrayElement(TITLE_OFFERS),
   'price': getRandomInteger(0, 500),
 });
 
@@ -13,7 +13,7 @@ const mockOffers = () => Array.from(
   { length: getRandomInteger(0, OFFERS_COUNT) }, createOffer);
 
 
-const mockTypes = () => {
+const mockTypeOffers = () => {
   const result = [];
   for (let i = 0; i < TYPES.length; i++) {
     result[i] = {
@@ -24,6 +24,6 @@ const mockTypes = () => {
   return result;
 };
 
-const offersCollId = () => Array.from(mockOffers().keys());
+const offersCollId = () => getIdList(mockOffers());
 
-export { mockTypes, offersCollId };
+export { mockTypeOffers, offersCollId, mockOffers };

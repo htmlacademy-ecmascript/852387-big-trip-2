@@ -16,19 +16,20 @@ export default class BoardPointsPresenter {
 
   init() {
     this.boardPoints = [...this.pointsModel.getPoints()];
-    console.log(this.boardPoints);
 
     render(this.boardPointsComponent, this.boardPointsContainer);
     render(this.pointListComponent, this.boardPointsComponent.getElement());
     render(new PointAddView(), this.pointListComponent.getElement());
-    render(new PointView(), this.pointListComponent.getElement());
+    render(new PointView({point: this.boardPoints[0]}), this.pointListComponent.getElement());
     render(new PointEditView(), this.pointListComponent.getElement());
 
-    for (let i = 0; i < this.boardPoints.length; i++) {
-      console.log('i=', i);
+    //console.log(this.boardPoints.length);
+
+    for (let i = 1; i < this.boardPoints.length; i++) {
+      //console.log('i=', i);
       //console.log(this.pointListComponent.getElement());
       render(new PointView({point: this.boardPoints[i]}), this.pointListComponent.getElement());
-      //console.log(new PointView({point: this.boardPoints[i]}));
+      //console.log(this.boardPoints[i]);
     }
   }
 }

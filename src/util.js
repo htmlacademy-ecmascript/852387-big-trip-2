@@ -1,3 +1,9 @@
+import dayjs from 'dayjs';
+
+const DATE_FORMAT = 'D MMMM';
+const TIME_FORMAT = 'HH:mm';
+const DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
+
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
@@ -10,7 +16,7 @@ const getRandomInteger = (a, b) => {
 };
 
 function createIdGenerator () {
-  let lastGeneratedId = 0;
+  let lastGeneratedId = -1;
 
   return function () {
     lastGeneratedId += 1;
@@ -18,4 +24,14 @@ function createIdGenerator () {
   };
 }
 
-export { getRandomArrayElement, getRandomInteger, createIdGenerator };
+function humanizePointDate(date, format) {
+  return date ? dayjs(date).format(format) : '';
+}
+
+function getIdList(arr) {
+  return arr.map((el) => (el.id));
+}
+
+export { getRandomArrayElement, getRandomInteger, createIdGenerator,
+  humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT,
+  getIdList };

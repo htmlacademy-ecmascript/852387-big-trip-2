@@ -1,4 +1,4 @@
-const POINTS_COUNT = 10;
+const POINTS_COUNT = 9;
 const OFFERS_COUNT = 6;
 const PICTURES_COUNT = 6;
 
@@ -7,7 +7,11 @@ const TYPES = [
   'Check-in', 'Sightseeing', 'Restaurant'
 ];
 
-const CITIES = ['Chamonix', 'Bath', 'Liverpool', 'Barcelona', 'Singapore', 'Dallas', 'Caracas'];
+const CITIES = ['Chamonix', 'Bath', 'Liverpool', 'Barcelona', 'Singapore', 'Dallas', 'Caracas', 'Moscow', 'SPB'];
+
+const TITLE_OFFERS = ['Upgrade to a business class', 'Add luggage', 'conditioner', 'WI-FI',
+  'Switch to comfort', 'Order an Uber', 'Rent a car', 'Add breakfast', 'Travel by train',
+  'Choose places', 'Choose the radio station'];
 
 const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -50,4 +54,5 @@ const PICTURE_DESCRIPTIONS = [
   'An ancient book, mysterious pages.'
 ]; //+
 
-export { POINTS_COUNT, OFFERS_COUNT, PICTURES_COUNT, TYPES, CITIES, DESCRIPTIONS, PICTURE_DESCRIPTIONS };
+export { POINTS_COUNT, OFFERS_COUNT, PICTURES_COUNT, TYPES, CITIES, DESCRIPTIONS,
+  PICTURE_DESCRIPTIONS, TITLE_OFFERS };
