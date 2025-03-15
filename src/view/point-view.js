@@ -1,5 +1,5 @@
 import { createElement } from '../render.js';
-import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT } from '../util.js';
+import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, getDuration, getTimeFromMins } from '../util.js';
 //import { mockDestinations } from '../mock/destination.js';
 import { descriptionData } from '../mock/destination.js';
 
@@ -10,11 +10,16 @@ function createPointTemplate(point) {
   console.log(point);
 
   const dateStart = humanizePointDate(dateFrom, DATE_FORMAT);
-  const dateEnd = humanizePointDate(dateTo, DATE_FORMAT);
+  //const dateEnd = humanizePointDate(dateTo, DATE_FORMAT);
   const timeStart = humanizePointDate(dateFrom, TIME_FORMAT);
   const timeEnd = humanizePointDate(dateTo, TIME_FORMAT);
   const dateTimeStart = humanizePointDate(dateFrom, DATETIME_FORMAT);
   const dateTimeEnd = humanizePointDate(dateTo, DATETIME_FORMAT);
+
+  const duration = getDuration(dateFrom, dateTo);
+  //console.log(duration);
+  const diffTime = getTimeFromMins(duration);
+  //console.log(diffTime);
 
   //const description = let cityId = cities.find(city => city.name === searchTerm).id
   const destinationName = descriptionData.find((item) => item.id === destination).name;
@@ -35,7 +40,7 @@ function createPointTemplate(point) {
                   —
                   </font></font><time class="event__end-time" datetime="${dateTimeEnd}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${timeEnd}</font></font></time>
                 </p>
-                <p class="event__duration"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">01Ч 10М</font></font></p>
+                <p class="event__duration"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${diffTime}</font></font></p>
               </div>
               <p class="event__price"><font style="vertical-align: inherit;"><span class="event__price-value"><font style="vertical-align: inherit;">${price}</font></span><font style="vertical-align: inherit;">
                 евро&nbsp;</font></font><span class="event__price-value"><font style="vertical-align: inherit;"></font></span>

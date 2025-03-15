@@ -26,4 +26,4 @@ const mockTypeOffers = () => {
 
 const offersCollId = () => getIdList(mockOffers());
 
-export { mockTypeOffers, offersCollId, mockOffers };
+export { mockTypeOffers, offersCollId };

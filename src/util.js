@@ -28,10 +28,20 @@ function humanizePointDate(date, format) {
   return date ? dayjs(date).format(format) : '';
 }
 
+function getDuration(date1, date2) {
+  return dayjs(date2).diff(dayjs(date1), 'minute');
+}
+
+function getTimeFromMins(mins) {
+  const hours = Math.trunc(mins / 60);
+  const minutes = mins % 60;
+  return `${hours}Ч ${minutes}М`;
+}
+
 function getIdList(arr) {
   return arr.map((el) => (el.id));
 }
 
 export { getRandomArrayElement, getRandomInteger, createIdGenerator,
   humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT,
-  getIdList };
+  getTimeFromMins, getDuration, getIdList };
