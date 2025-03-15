@@ -21,7 +21,6 @@ const mockPoints = Array.from({length: POINTS_COUNT}, createPoint);
 // JSON.stringify(mockPoints, null, 2);
 
 function getRandomPoint() {
-  console.log(mockPoints);
   return getRandomArrayElement(mockPoints);
 
 }

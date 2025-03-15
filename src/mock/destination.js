@@ -1,4 +1,3 @@
-import { getRandomArrayElement } from '../util.js';
 import { DESCRIPTIONS, CITIES } from './const.js';
 import { mockPictures } from './pictures.js';
 

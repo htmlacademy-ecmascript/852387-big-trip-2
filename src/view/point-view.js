@@ -1,9 +1,37 @@
 import { createElement } from '../render.js';
-import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, getDuration, getTimeFromMins } from '../util.js';
-//import { mockDestinations } from '../mock/destination.js';
+import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, getDuration, getTimeFromMins, isSelectedOffers } from '../util.js';
 import { descriptionData } from '../mock/destination.js';
+import { mockTypeOffers } from '../mock/offer.js';
 
-//const descriptionData = mockDestinations();
+function createOfferTemplate(offers) {
+
+  return (
+    `${isSelectedOffers(offers) ?
+      `<h4 class="visually-hidden">
+        <font style="vertical-align: inherit;">
+          <font style="vertical-align: inherit;">Предложения:</font>
+        </font>
+      </h4>
+      <ul class="event__selected-offers">
+      ${Object.entries(offers).map(([,{price, title}]) =>
+      `<li class="event__offer">
+        <span class="event__offer-title">
+          <font style="vertical-align: inherit;">
+            <font style="vertical-align: inherit;">${title}</font>
+          </font>
+        </span>
+        <font style="vertical-align: inherit;">
+          <font style="vertical-align: inherit;">+&nbsp;</font>
+        </font>
+        <span class="event__offer-price">
+          <font style="vertical-align: inherit;">
+            <font style="vertical-align: inherit;">${price} €</font>
+          </font>
+        </span>
+      </li>`).join('')}
+    </ul>` : ''}`
+  );
+}
 
 function createPointTemplate(point) {
   const {base_price: price, date_from: dateFrom, date_to: dateTo, destination, id, is_favorite: isFavorite, offers, type} = point;
@@ -17,15 +45,14 @@ function createPointTemplate(point) {
   const dateTimeEnd = humanizePointDate(dateTo, DATETIME_FORMAT);
 
   const duration = getDuration(dateFrom, dateTo);
-  //console.log(duration);
+
   const diffTime = getTimeFromMins(duration);
-  //console.log(diffTime);
 
-  //const description = let cityId = cities.find(city => city.name === searchTerm).id
   const destinationName = descriptionData.find((item) => item.id === destination).name;
-  //console.log(destinationName);
 
-  //const offers = () => {};
+  const pointTypeOffer = mockTypeOffers().find((offer) => offer.type === point.type);
+
+  const dataOffers = createOfferTemplate(pointTypeOffer.offers);
 
   return `<li class="trip-events__item">
             <div class="event">
@@ -45,19 +72,9 @@ function createPointTemplate(point) {
               <p class="event__price"><font style="vertical-align: inherit;"><span class="event__price-value"><font style="vertical-align: inherit;">${price}</font></span><font style="vertical-align: inherit;">
                 евро&nbsp;</font></font><span class="event__price-value"><font style="vertical-align: inherit;"></font></span>
               </p>
-              <h4 class="visually-hidden"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Предложения:</font></font></h4>
-              <ul class="event__selected-offers">
-                <li class="event__offer">
-                  <span class="event__offer-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Добавить багаж</font></font></span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
-                  +&nbsp;
-                    </font></font><span class="event__offer-price"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">50 €</font></font></span>
-                </li>
-                <li class="event__offer">
-                  <span class="event__offer-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Переключиться на комфорт </font></font></span><font style="vertical-align: inherit;"><span class="event__offer-price"><font style="vertical-align: inherit;">+80</font></span><font style="vertical-align: inherit;">
-                  евро&nbsp;
-                  </font></font><span class="event__offer-price"><font style="vertical-align: inherit;"></font></span>
-                </li>
-              </ul>
+
+              ${dataOffers}
+
               <button class="event__favorite-btn" type="button">
                 <span class="visually-hidden"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Добавить в избранное</font></font></span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

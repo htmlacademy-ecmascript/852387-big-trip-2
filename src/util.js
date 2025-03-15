@@ -42,6 +42,10 @@ function getIdList(arr) {
   return arr.map((el) => (el.id));
 }
 
+function isSelectedOffers(offers) {
+  return offers.length > 0;
+}
+
 export { getRandomArrayElement, getRandomInteger, createIdGenerator,
   humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT,
-  getTimeFromMins, getDuration, getIdList };
+  getTimeFromMins, getDuration, getIdList, isSelectedOffers };
