@@ -24,6 +24,10 @@ function createIdGenerator () {
   };
 }
 
+function isTrue () {
+  return getRandomInteger(0, 1);
+}
+
 function humanizePointDate(date, format) {
   return date ? dayjs(date).format(format) : '';
 }
@@ -46,6 +50,10 @@ function isSelectedOffers(offers) {
   return offers.length > 0;
 }
 
+function isFavoritePoint(data) {
+  return data ? 'event__favorite-btn--active' : '';
+}
+
 export { getRandomArrayElement, getRandomInteger, createIdGenerator,
   humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT,
-  getTimeFromMins, getDuration, getIdList, isSelectedOffers };
+  getTimeFromMins, getDuration, getIdList, isSelectedOffers, isFavoritePoint, isTrue };

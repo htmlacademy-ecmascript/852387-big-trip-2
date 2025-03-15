@@ -1,5 +1,5 @@
 import { createElement } from '../render.js';
-import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, getDuration, getTimeFromMins, isSelectedOffers } from '../util.js';
+import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, getDuration, getTimeFromMins, isSelectedOffers, isFavoritePoint } from '../util.js';
 import { descriptionData } from '../mock/destination.js';
 import { mockTypeOffers } from '../mock/offer.js';
 
@@ -34,7 +34,7 @@ function createOfferTemplate(offers) {
 }
 
 function createPointTemplate(point) {
-  const {base_price: price, date_from: dateFrom, date_to: dateTo, destination, id, is_favorite: isFavorite, offers, type} = point;
+  const {base_price: price, date_from: dateFrom, date_to: dateTo, destination, is_favorite: isFavorite, type} = point;
   console.log(point);
 
   const dateStart = humanizePointDate(dateFrom, DATE_FORMAT);
@@ -52,7 +52,9 @@ function createPointTemplate(point) {
 
   const pointTypeOffer = mockTypeOffers().find((offer) => offer.type === point.type);
 
-  const dataOffers = createOfferTemplate(pointTypeOffer.offers);
+  const getOffers = createOfferTemplate(pointTypeOffer.offers);
+
+  const addClassBtnFavorite = isFavoritePoint(isFavorite);
 
   return `<li class="trip-events__item">
             <div class="event">
@@ -73,9 +75,9 @@ function createPointTemplate(point) {
                 евро&nbsp;</font></font><span class="event__price-value"><font style="vertical-align: inherit;"></font></span>
               </p>
 
-              ${dataOffers}
+              ${getOffers}
 
-              <button class="event__favorite-btn" type="button">
+              <button class="event__favorite-btn ${addClassBtnFavorite}" type="button">
                 <span class="visually-hidden"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Добавить в избранное</font></font></span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
                   <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
