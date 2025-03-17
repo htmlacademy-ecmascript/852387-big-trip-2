@@ -20,4 +20,4 @@ const mockDestinations = () => {
 
 const descriptionData = mockDestinations();
 
-export { descriptionData };
+export { descriptionData, mockDestinations };

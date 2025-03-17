@@ -1,29 +1,28 @@
-import { getRandomInteger, createIdGenerator, getRandomArrayElement, getIdList } from '../util.js';
+import { getRandomInteger, getRandomArrayElement, getIdList, getMultipleRandom } from '../util.js';
 import { OFFERS_COUNT, TYPES, TITLE_OFFERS } from './const.js';
 
-const generateOfferId = createIdGenerator();
-
 const createOffer = () => ({
-  'id': generateOfferId(),
+  'id': getRandomInteger(0, 10),
   'title': getRandomArrayElement(TITLE_OFFERS),
   'price': getRandomInteger(0, 500),
 });
 
-const mockOffers = () => Array.from(
-  { length: getRandomInteger(0, OFFERS_COUNT) }, createOffer);
+const getOffers = () => Array.from(
+  { length: OFFERS_COUNT }, createOffer);
 
 
-const mockTypeOffers = () => {
+const mockOffers = () => {
   const result = [];
   for (let i = 0; i < TYPES.length; i++) {
     result[i] = {
       'type': TYPES[i],
-      'offers': mockOffers()
+      'offers': getOffers()
     };
   }
   return result;
 };
 
-const offersCollId = () => getIdList(mockOffers());
+const offersCollId = getIdList(getOffers());
+const offersChecked = () => getMultipleRandom(getOffers(), offersCollId.length - 2);
 
-export { mockTypeOffers, offersCollId };
+export { mockOffers, offersChecked };

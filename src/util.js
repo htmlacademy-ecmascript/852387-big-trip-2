@@ -46,6 +46,13 @@ function getIdList(arr) {
   return arr.map((el) => (el.id));
 }
 
+function getMultipleRandom(arr, num) {
+  const newArr = getIdList(arr);
+  const shuffled = [...newArr].sort(() => 0.5 - Math.random());
+
+  return shuffled.slice(0, num);
+}
+
 function isSelectedOffers(offers) {
   return offers.length > 0;
 }
@@ -56,4 +63,5 @@ function isFavoritePoint(data) {
 
 export { getRandomArrayElement, getRandomInteger, createIdGenerator,
   humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT,
-  getTimeFromMins, getDuration, getIdList, isSelectedOffers, isFavoritePoint, isTrue };
+  getTimeFromMins, getDuration, getIdList, isSelectedOffers, isFavoritePoint, isTrue,
+  getMultipleRandom };
