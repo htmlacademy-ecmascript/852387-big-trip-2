@@ -3,6 +3,8 @@ import dayjs from 'dayjs';
 const DATE_FORMAT = 'D MMMM';
 const TIME_FORMAT = 'HH:mm';
 const DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
+const DATETIME_FORMAT_NEW = 'DD/MM/YY HH:mm';
+
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -64,4 +66,4 @@ function isFavoritePoint(data) {
 export { getRandomArrayElement, getRandomInteger, createIdGenerator,
   humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT,
   getTimeFromMins, getDuration, getIdList, isSelectedOffers, isFavoritePoint, isTrue,
-  getMultipleRandom };
+  getMultipleRandom, DATETIME_FORMAT_NEW };
