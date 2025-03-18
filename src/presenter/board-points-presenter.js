@@ -3,24 +3,26 @@ import PointEditView from '../view/point-edit-view';
 import PointAddView from '../view/point-add-view';
 import PointView from '../view/point-view';
 import { render } from '../render';
+import { getDefaultPoint } from '../mock/const';
 
 export default class BoardPointsPresenter {
-  boardPointsComponent = new PointListView();
-  pointListComponent = new PointListView();
-
-  constructor({boardPointsContainer}) {
-    this.boardPointsContainer = boardPointsContainer;
+  constructor({container, pointsModel}) {
+    this.mainContainer = container;
+    this.boardPointsComponent = new PointListView();
+    this.pointsModel = pointsModel;
   }
 
   init() {
-    render(this.boardPointsComponent, this.boardPointsContainer);
-    render(this.pointListComponent, this.boardPointsComponent.getElement());
-    render(new PointAddView(), this.pointListComponent.getElement());
-    render(new PointView(), this.pointListComponent.getElement());
-    render(new PointEditView(), this.pointListComponent.getElement());
+    const points = this.pointsModel.getPoints();
+    const destinations = this.pointsModel.getDestinations();
+    const offers = this.pointsModel.getOffers();
 
-    for (let i = 0; i < 3; i++) {
-      render(new PointView(), this.pointListComponent.getElement());
+    render(this.boardPointsComponent, this.mainContainer);
+    render(new PointAddView(getDefaultPoint(), destinations, offers), this.boardPointsComponent.getElement());
+    render(new PointEditView(points[2], destinations, offers), this.boardPointsComponent.getElement());
+
+    for (const point of points) {
+      render(new PointView(point, destinations, offers), this.boardPointsComponent.getElement());
     }
   }
 }

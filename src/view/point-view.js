@@ -1,38 +1,75 @@
-import {createElement} from '../render.js';
+import { createElement } from '../render.js';
+import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, getDuration, getTimeFromMins, isSelectedOffers, isFavoritePoint } from '../util.js';
 
-function createPointTemplate() {
+function createOfferTemplate(pointOffers) {
+
+  return (
+    `${isSelectedOffers(pointOffers) ?
+      `<h4 class="visually-hidden">
+        <font style="vertical-align: inherit;">
+          <font style="vertical-align: inherit;">Предложения:</font>
+        </font>
+      </h4>
+      <ul class="event__selected-offers">
+      ${pointOffers.map((offer) =>
+      `<li class="event__offer">
+        <span class="event__offer-title">
+          <font style="vertical-align: inherit;">
+            <font style="vertical-align: inherit;">${offer.title}</font>
+          </font>
+        </span>
+        <font style="vertical-align: inherit;">
+          <font style="vertical-align: inherit;">+&nbsp;</font>
+        </font>
+        <span class="event__offer-price">
+          <font style="vertical-align: inherit;">
+            <font style="vertical-align: inherit;">${offer.price} €</font>
+          </font>
+        </span>
+      </li>`).join('')}
+    </ul>` : ''}`
+  );
+}
+
+function createPointTemplate(point, destinations, offers) {
+
+  const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
+  const typeOffers = offers.find((item) => item.type === point.type).offers;
+  const pointCheckedOffers = typeOffers.filter((typeOffer) => point.offers.includes(typeOffer.id));
+  const pointDestination = destinations.find((item) => item.id === point.destination);
+
+  const dateStart = humanizePointDate(dateFrom, DATE_FORMAT);
+  const timeStart = humanizePointDate(dateFrom, TIME_FORMAT);
+  const timeEnd = humanizePointDate(dateTo, TIME_FORMAT);
+  const dateTimeStart = humanizePointDate(dateFrom, DATETIME_FORMAT);
+  const dateTimeEnd = humanizePointDate(dateTo, DATETIME_FORMAT);
+  const duration = getDuration(dateFrom, dateTo);
+  const diffTime = getTimeFromMins(duration);
+
+  const addClassBtnFavorite = isFavoritePoint(isFavorite);
+
   return `<li class="trip-events__item">
             <div class="event">
-              <time class="event__date" datetime="2019-03-18"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">18 МАР</font></font></time>
+              <time class="event__date" datetime="${dateStart}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${dateStart}</font></font></time>
               <div class="event__type">
-                <img class="event__type-icon" width="42" height="42" src="img/icons/flight.png" alt="Значок типа события">
+                <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Значок типа события">
               </div>
-              <h3 class="event__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Рейс Шамони</font></font></h3>
+              <h3 class="event__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${type} ${pointDestination.name}</font></font></h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="2019-03-18T12:25"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">12:25</font></font></time><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                  <time class="event__start-time" datetime="${dateTimeStart}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${timeStart}</font></font></time><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
                   —
-                  </font></font><time class="event__end-time" datetime="2019-03-18T13:35"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">13:35</font></font></time>
+                  </font></font><time class="event__end-time" datetime="${dateTimeEnd}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${timeEnd}</font></font></time>
                 </p>
-                <p class="event__duration"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">01Ч 10М</font></font></p>
+                <p class="event__duration"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${diffTime}</font></font></p>
               </div>
-              <p class="event__price"><font style="vertical-align: inherit;"><span class="event__price-value"><font style="vertical-align: inherit;">160</font></span><font style="vertical-align: inherit;">
+              <p class="event__price"><font style="vertical-align: inherit;"><span class="event__price-value"><font style="vertical-align: inherit;">${basePrice}</font></span><font style="vertical-align: inherit;">
                 евро&nbsp;</font></font><span class="event__price-value"><font style="vertical-align: inherit;"></font></span>
               </p>
-              <h4 class="visually-hidden"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Предложения:</font></font></h4>
-              <ul class="event__selected-offers">
-                <li class="event__offer">
-                  <span class="event__offer-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Добавить багаж</font></font></span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
-                  +&nbsp;
-                    </font></font><span class="event__offer-price"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">50 €</font></font></span>
-                </li>
-                <li class="event__offer">
-                  <span class="event__offer-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Переключиться на комфорт </font></font></span><font style="vertical-align: inherit;"><span class="event__offer-price"><font style="vertical-align: inherit;">+80</font></span><font style="vertical-align: inherit;">
-                  евро&nbsp;
-                  </font></font><span class="event__offer-price"><font style="vertical-align: inherit;"></font></span>
-                </li>
-              </ul>
-              <button class="event__favorite-btn" type="button">
+
+              ${createOfferTemplate(pointCheckedOffers)}
+
+              <button class="event__favorite-btn ${addClassBtnFavorite}" type="button">
                 <span class="visually-hidden"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Добавить в избранное</font></font></span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
                   <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
@@ -46,8 +83,14 @@ function createPointTemplate() {
 }
 
 export default class PointView {
+  constructor(point, destinations, offers) {
+    this.point = point;
+    this.destinations = destinations;
+    this.offers = offers;
+  }
+
   getTemplate() {
-    return createPointTemplate();
+    return createPointTemplate(this.point, this.destinations, this.offers);
   }
 
   getElement() {
