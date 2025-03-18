@@ -2,7 +2,7 @@ import { getRandomInteger, getRandomArrayElement } from '../util.js';
 import { PICTURES_COUNT, PICTURE_DESCRIPTIONS } from './const.js';
 
 const createPicture = () => ({
-  'src': `https://loremflickr.com/248/152?random=${getRandomInteger(0, 20)}`,
+  'src': `img/photos/${getRandomInteger(1, 5)}.jpg`,
   'description': getRandomArrayElement(PICTURE_DESCRIPTIONS),
 });
 
