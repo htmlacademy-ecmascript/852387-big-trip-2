@@ -4,27 +4,31 @@ import { mockOffers } from '../mock/offer.js';
 
 //const POINT_COUNT = 4;
 export default class PointsModel {
+  #points = null;
+  #destinations = null;
+  #offers = null;
+
   constructor() {
-    this.points = [];
-    this.destinations = [];
-    this.offers = [];
+    this.#points = [];
+    this.#destinations = [];
+    this.#offers = [];
   }
 
   init() {
-    this.points = mockPoints;
-    this.destinations = mockDestinations();
-    this.offers = mockOffers();
+    this.#points = mockPoints;
+    this.#destinations = mockDestinations();
+    this.#offers = mockOffers();
   }
 
-  getPoints() {
-    return this.points;
+  get points() {
+    return this.#points;
   }
 
-  getDestinations() {
-    return this.destinations;
+  get destinations() {
+    return this.#destinations;
   }
 
-  getOffers() {
-    return this.offers;
+  get offers() {
+    return this.#offers;
   }
 }
