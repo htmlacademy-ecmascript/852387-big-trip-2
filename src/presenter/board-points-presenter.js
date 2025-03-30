@@ -23,10 +23,16 @@ export default class BoardPointsPresenter {
 
     render(this.#boardPointsComponent, this.#mainContainer);
     render(new PointAddView(DEFAULT_POINT, destinations, offers), this.#boardPointsComponent.element);
-    render(new PointEditView(points[2], destinations, offers), this.#boardPointsComponent.element);
+    //render(new PointEditView(points[2], destinations, offers), this.#boardPointsComponent.element);
 
     for (const point of points) {
-      render(new PointView(point, destinations, offers), this.#boardPointsComponent.element);
+      //render(new PointView(point, destinations, offers), this.#boardPointsComponent.element);
+      this.#renderPoint(point, destinations, offers);
     }
+  }
+
+  #renderPoint(point, destinations, offers) {
+    const pointComponent = new PointView(point, destinations, offers);
+    render(pointComponent, this.#boardPointsComponent.element);
   }
 }
