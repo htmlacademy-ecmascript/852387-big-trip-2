@@ -1,9 +1,9 @@
-import PointListView from '../view/point-list-view';
-import PointEditView from '../view/point-edit-view';
-import PointAddView from '../view/point-add-view';
-import PointView from '../view/point-view';
-import { render } from '../render';
-import { getDefaultPoint } from '../mock/const';
+import PointListView from '../view/point-list-view.js';
+import PointEditView from '../view/point-edit-view.js';
+import PointAddView from '../view/point-add-view.js';
+import PointView from '../view/point-view.js';
+import { render } from '../framework/render.js';
+import { DEFAULT_POINT } from '../mock/const.js';
 
 export default class BoardPointsPresenter {
   constructor({container, pointsModel}) {
@@ -18,11 +18,11 @@ export default class BoardPointsPresenter {
     const offers = this.pointsModel.getOffers();
 
     render(this.boardPointsComponent, this.mainContainer);
-    render(new PointAddView(getDefaultPoint(), destinations, offers), this.boardPointsComponent.getElement());
-    render(new PointEditView(points[2], destinations, offers), this.boardPointsComponent.getElement());
+    render(new PointAddView(DEFAULT_POINT, destinations, offers), this.boardPointsComponent.element);
+    render(new PointEditView(points[2], destinations, offers), this.boardPointsComponent.element);
 
     for (const point of points) {
-      render(new PointView(point, destinations, offers), this.boardPointsComponent.getElement());
+      render(new PointView(point, destinations, offers), this.boardPointsComponent.element);
     }
   }
 }

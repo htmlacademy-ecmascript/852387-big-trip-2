@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { TYPES } from '../mock/const.js';
 
 function createPointAddTemplate(point, destinations, offers) {
@@ -92,26 +92,18 @@ function createPointAddTemplate(point, destinations, offers) {
           </form>`;
 }
 
-export default class PointAddView {
+export default class PointAddView extends AbstractView {
+  #point = null;
+  #destinations = null;
+  #offers = null;
   constructor(point, destinations, offers) {
-    this.point = point;
-    this.destinations = destinations;
-    this.offers = offers;
+    super();
+    this.#point = point;
+    this.#destinations = destinations;
+    this.#offers = offers;
   }
 
-  getTemplate() {
-    return createPointAddTemplate(this.point, this.destinations, this.offers);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createPointAddTemplate(this.#point, this.#destinations, this.#offers);
   }
 }
