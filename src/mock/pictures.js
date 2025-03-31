@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomArrayElement } from '../util/common.js';
+import { getRandomInteger, getRandomArrayElement } from '../utils/common.js';
 import { PICTURES_COUNT, PICTURE_DESCRIPTIONS } from './const.js';
 
 const createPicture = () => ({

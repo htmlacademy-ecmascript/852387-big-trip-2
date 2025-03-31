@@ -21,5 +21,18 @@ function isFavoritePoint(data) {
   return data ? 'event__favorite-btn--active' : '';
 }
 
+function isFurutePoint(data) {
+  return dayjs().isAfter(dayjs(data), 'D');
+}
+
+function isPesentPoint(dataFrom, dataTo) {
+  return dayjs(dataFrom).isSameOrBefore(dayjs(), 'D') && dayjs(dataTo).isSameOrAfter(dayjs(), 'D');
+}
+
+function isPastPoint(data) {
+  return dayjs().isBefore(dayjs(data), 'D');
+}
+
 export { DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, DATETIME_FORMAT_NEW,
-  humanizePointDate, getDuration, isSelectedOffers, isFavoritePoint };
+  humanizePointDate, getDuration, isSelectedOffers, isFavoritePoint,
+  isFurutePoint, isPesentPoint, isPastPoint };
