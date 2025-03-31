@@ -1,28 +1,89 @@
-import PointListView from '../view/point-list-view';
-import PointEditView from '../view/point-edit-view';
-import PointAddView from '../view/point-add-view';
-import PointView from '../view/point-view';
-import { render } from '../render';
-import { getDefaultPoint } from '../mock/const';
+import { render, replace } from '../framework/render.js';
+import SortView from '../view/sort-view.js';
+import PointListView from '../view/point-list-view.js';
+import PointEditView from '../view/point-edit-view.js';
+import PointView from '../view/point-view.js';
+import NoPointView from '../view/no-point-view.js';
+
 
 export default class BoardPointsPresenter {
+  #mainContainer = null;
+  #pointsModel = null;
+
+  #boardPointsComponent = new PointListView();
+
+  #boardPoints = [];
+  #destinations = [];
+  #offers = [];
+
   constructor({container, pointsModel}) {
-    this.mainContainer = container;
-    this.boardPointsComponent = new PointListView();
-    this.pointsModel = pointsModel;
+    this.#mainContainer = container;
+    this.#pointsModel = pointsModel;
   }
 
   init() {
-    const points = this.pointsModel.getPoints();
-    const destinations = this.pointsModel.getDestinations();
-    const offers = this.pointsModel.getOffers();
+    this.#boardPoints = [...this.#pointsModel.points];
+    this.#destinations = [...this.#pointsModel.destinations];
+    this.#offers = [...this.#pointsModel.offers];
 
-    render(this.boardPointsComponent, this.mainContainer);
-    render(new PointAddView(getDefaultPoint(), destinations, offers), this.boardPointsComponent.getElement());
-    render(new PointEditView(points[2], destinations, offers), this.boardPointsComponent.getElement());
+    this.#renderBoard();
+  }
 
-    for (const point of points) {
-      render(new PointView(point, destinations, offers), this.boardPointsComponent.getElement());
+  #renderPoint(point) {
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+
+    const pointComponent = new PointView({
+      point, destinations: this.#destinations, offers: this.#offers,
+      onEditClick: () => {
+        replaceCardToForm();
+        document.addEventListener('keydown', escKeyDownHandler);
+      },
+    });
+
+    const pointEditComponent = new PointEditView({
+      point, destinations: this.#destinations, offers: this.#offers,
+      onFormSubmit: () => {
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      },
+      onClick: () => {
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      },
+    });
+
+    function replaceCardToForm() {
+      replace(pointEditComponent, pointComponent);
     }
+
+    function replaceFormToCard() {
+      replace(pointComponent, pointEditComponent);
+    }
+
+    render(pointComponent, this.#boardPointsComponent.element);
+  }
+
+  #renderBoard() {
+
+    if (this.#boardPoints.length === 0) {
+      render(new NoPointView(), this.#mainContainer);
+      return;
+    }
+
+    render(new SortView(), this.#mainContainer);
+
+    render(this.#boardPointsComponent, this.#mainContainer);
+
+    this.#boardPoints.forEach((point) => this.#renderPoint(point));
+    // for (const point of this.#boardPoints) {
+    // //  render(new PointView({point,destinations: this.#destinations, offers: this.#offers}), this.#boardPointsComponent.element);
+    //   this.#renderPoint(point);
+    // }
   }
 }

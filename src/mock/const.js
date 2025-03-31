@@ -54,7 +54,7 @@ const PICTURE_DESCRIPTIONS = [
   'An ancient book, mysterious pages.'
 ]; //+
 
-const getDefaultPoint = () => ({
+const DEFAULT_POINT = {
   basePrice: 0,
   dateFrom: new Date().toISOString(),
   dateTo: new Date().toISOString(),
@@ -62,7 +62,7 @@ const getDefaultPoint = () => ({
   isFavorite: false,
   offers: [],
   type: TYPES[0]
-});
+};
 
 export { POINTS_COUNT, OFFERS_COUNT, PICTURES_COUNT, TYPES, CITIES, DESCRIPTIONS,
-  PICTURE_DESCRIPTIONS, TITLE_OFFERS, getDefaultPoint };
+  PICTURE_DESCRIPTIONS, TITLE_OFFERS, DEFAULT_POINT };
