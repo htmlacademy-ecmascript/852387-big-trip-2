@@ -24,16 +24,7 @@ export default class BoardPointsPresenter {
     this.#destinations = [...this.#pointsModel.destinations];
     this.#offers = [...this.#pointsModel.offers];
 
-    render(new SortView(), this.#mainContainer);
-
-    render(this.#boardPointsComponent, this.#mainContainer);
-
-    this.#boardPoints.forEach((point) => this.#renderPoint(point));
-
-    // for (const point of this.#boardPoints) {
-    // //  render(new PointView({point,destinations: this.#destinations, offers: this.#offers}), this.#boardPointsComponent.element);
-    //   this.#renderPoint(point);
-    // }
+    this.#renderBoard();
   }
 
   #renderPoint(point) {
@@ -74,5 +65,17 @@ export default class BoardPointsPresenter {
     }
 
     render(pointComponent, this.#boardPointsComponent.element);
+  }
+
+  #renderBoard() {
+    render(new SortView(), this.#mainContainer);
+
+    render(this.#boardPointsComponent, this.#mainContainer);
+
+    this.#boardPoints.forEach((point) => this.#renderPoint(point));
+    // for (const point of this.#boardPoints) {
+    // //  render(new PointView({point,destinations: this.#destinations, offers: this.#offers}), this.#boardPointsComponent.element);
+    //   this.#renderPoint(point);
+    // }
   }
 }
