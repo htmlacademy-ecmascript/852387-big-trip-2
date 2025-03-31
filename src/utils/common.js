@@ -41,6 +41,13 @@ function getMultipleRandom(arr, num) {
   return shuffled.slice(0, num);
 }
 
+function getCapitalizeWord(word) {
+  return word.replace(/^./, (char) => char.toUpperCase());
+}
+
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
 
 export { getRandomArrayElement, getRandomInteger, createIdGenerator,
-  getTimeFromMins, getIdList, isTrue, getMultipleRandom };
+  getTimeFromMins, getIdList, isTrue, getMultipleRandom, getCapitalizeWord, randomDate };

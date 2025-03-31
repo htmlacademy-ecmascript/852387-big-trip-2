@@ -1,4 +1,9 @@
 import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 
 const DATE_FORMAT = 'D MMMM';
 const TIME_FORMAT = 'HH:mm';
@@ -22,7 +27,7 @@ function isFavoritePoint(data) {
 }
 
 function isFurutePoint(data) {
-  return dayjs().isAfter(dayjs(data), 'D');
+  return dayjs().isBefore(dayjs(data), 'D');
 }
 
 function isPesentPoint(dataFrom, dataTo) {
@@ -30,7 +35,7 @@ function isPesentPoint(dataFrom, dataTo) {
 }
 
 function isPastPoint(data) {
-  return dayjs().isBefore(dayjs(data), 'D');
+  return dayjs().isAfter(dayjs(data), 'D');
 }
 
 export { DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, DATETIME_FORMAT_NEW,
