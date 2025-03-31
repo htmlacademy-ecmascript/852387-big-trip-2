@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { TYPES } from '../mock/const.js';
+import { DEFAULT_POINT, TYPES } from '../mock/const.js';
 
 function createPointAddTemplate(point, destinations, offers) {
-  const {basePrice, type} = point;
+  const { basePrice, type } = point;
   const typeOffers = offers.find((item) => item.type === point.type).offers;
   const pointDestination = destinations.find((item) => item.id === point.destination);
   const {name, description, pictures} = pointDestination || {};
@@ -96,9 +96,10 @@ export default class PointAddView extends AbstractView {
   #point = null;
   #destinations = null;
   #offers = null;
-  constructor(point, destinations, offers) {
+
+  constructor({ point, destinations, offers }) {
     super();
-    this.#point = point;
+    this.#point = point || DEFAULT_POINT;
     this.#destinations = destinations;
     this.#offers = offers;
   }

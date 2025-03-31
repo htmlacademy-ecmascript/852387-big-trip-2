@@ -1,4 +1,4 @@
-import { TYPES } from '../mock/const.js';
+import { DEFAULT_POINT, TYPES } from '../mock/const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { humanizePointDate, DATETIME_FORMAT_NEW } from '../util.js';
 
@@ -15,7 +15,8 @@ function createPointEditTemplate(point, destinations, offers) {
   const dateTimeStart = humanizePointDate(dateFrom, DATETIME_FORMAT_NEW);
   const dateTimeEnd = humanizePointDate(dateTo, DATETIME_FORMAT_NEW);
 
-  return `<form class="event event--edit" action="#" method="post">
+  return (`<li class="trip-events__item">
+    <form class="event event--edit" action="#" method="post">
             <header class="event__header">
               <div class="event__type-wrapper">
                 <label class="event__type  event__type-btn" for="event-type-toggle-${pointId}">
@@ -28,7 +29,7 @@ function createPointEditTemplate(point, destinations, offers) {
                   <fieldset class="event__type-group">
                     <legend class="visually-hidden">Event type</legend>
                     ${TYPES.map((pointType) =>
-    `<div class="event__type-item">
+      `<div class="event__type-item">
                       <input id="event-type-${pointType.toLowerCase()}-${pointId}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${pointType.toLowerCase()}" ${pointType === type ? 'checked' : ''}>
                       <label class="event__type-label  event__type-label--${pointType.toLowerCase()}" for="event-type-${pointType.toLowerCase()}-${pointId}">${pointType}</label>
                     </div>`).join('')}
@@ -74,8 +75,8 @@ function createPointEditTemplate(point, destinations, offers) {
 
                 <div class="event__available-offers">
   ${typeOffers.map((offer) => {
-    const checked = point.offers.includes(offer.id) ? 'checked' : '';
-    return `<div class="event__offer-selector">
+      const checked = point.offers.includes(offer.id) ? 'checked' : '';
+      return `<div class="event__offer-selector">
               <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title.split(' ').slice(-1)}-${pointId}" type="checkbox" name="event-offer-${offer.title.split(' ').slice(-1)}" ${checked}>
               <label class="event__offer-label" for="event-offer-${offer.title.split(' ').slice(-1)}-${pointId}">
                 <span class="event__offer-title">${offer.title}</span>
@@ -83,7 +84,7 @@ function createPointEditTemplate(point, destinations, offers) {
                 <span class="event__offer-price">${offer.price}</span>
               </label>
             </div>`;
-  }).join('')}
+    }).join('')}
 
                 </div>
               </section>
@@ -93,22 +94,45 @@ function createPointEditTemplate(point, destinations, offers) {
                 <p class="event__destination-description">${name} - ${description}</p>
               </section>
             </section>
-          </form>`;
+          </form>
+          </li>`
+  );
 }
 
 export default class PointEditView extends AbstractView {
   #point = null;
   #destinations = null;
   #offers = null;
+  #handleFormSubmit = null;
+  #onCLick = null;
 
-  constructor(point, destinations, offers) {
+  constructor({point, destinations, offers, onFormSubmit, onClick}) {
     super();
-    this.#point = point;
+    this.#point = point || DEFAULT_POINT;
     this.#destinations = destinations;
     this.#offers = offers;
+
+    this.#handleFormSubmit = onFormSubmit;
+    this.#onCLick = onClick;
+
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#clickHandler);
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
 
   get template() {
     return createPointEditTemplate(this.#point, this.#destinations, this.#offers);
   }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
+
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onCLick();
+  };
 }
