@@ -1,6 +1,7 @@
-import { DEFAULT_POINT, TYPES } from '../mock/const.js';
+import { TYPES } from '../mock/const.js';
+import { DEFAULT_POINT } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizePointDate, DATETIME_FORMAT_NEW } from '../util.js';
+import { humanizePointDate, DATETIME_FORMAT_NEW } from '../utils/point.js';
 
 function createPointEditTemplate(point, destinations, offers) {
 

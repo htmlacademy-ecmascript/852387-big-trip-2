@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { DEFAULT_POINT, TYPES } from '../mock/const.js';
+import { TYPES } from '../mock/const.js';
+import { DEFAULT_POINT } from '../const.js';
 
 function createPointAddTemplate(point, destinations, offers) {
   const { basePrice, type } = point;

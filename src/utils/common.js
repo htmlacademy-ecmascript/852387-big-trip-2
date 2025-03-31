@@ -1,9 +1,3 @@
-import dayjs from 'dayjs';
-
-const DATE_FORMAT = 'D MMMM';
-const TIME_FORMAT = 'HH:mm';
-const DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
-const DATETIME_FORMAT_NEW = 'DD/MM/YY HH:mm';
 
 
 function getRandomArrayElement(items) {
@@ -30,14 +24,6 @@ function isTrue () {
   return getRandomInteger(0, 1);
 }
 
-function humanizePointDate(date, format) {
-  return date ? dayjs(date).format(format) : '';
-}
-
-function getDuration(date1, date2) {
-  return dayjs(date2).diff(dayjs(date1), 'minute');
-}
-
 function getTimeFromMins(mins) {
   const hours = Math.trunc(mins / 60);
   const minutes = mins % 60;
@@ -55,15 +41,13 @@ function getMultipleRandom(arr, num) {
   return shuffled.slice(0, num);
 }
 
-function isSelectedOffers(offers) {
-  return offers.length > 0;
+function getCapitalizeWord(word) {
+  return word.replace(/^./, (char) => char.toUpperCase());
 }
 
-function isFavoritePoint(data) {
-  return data ? 'event__favorite-btn--active' : '';
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
 export { getRandomArrayElement, getRandomInteger, createIdGenerator,
-  humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT,
-  getTimeFromMins, getDuration, getIdList, isSelectedOffers, isFavoritePoint, isTrue,
-  getMultipleRandom, DATETIME_FORMAT_NEW };
+  getTimeFromMins, getIdList, isTrue, getMultipleRandom, getCapitalizeWord, randomDate };
