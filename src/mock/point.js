@@ -1,4 +1,4 @@
-import { getRandomInteger, createIdGenerator, getRandomArrayElement, isTrue } from '../util.js';
+import { getRandomInteger, createIdGenerator, getRandomArrayElement, isTrue } from '../util/common.js';
 import { POINTS_COUNT, TYPES } from './const.js';
 import { offersChecked } from './offer.js';
 

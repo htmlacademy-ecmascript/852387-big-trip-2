@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, getDuration, getTimeFromMins, isSelectedOffers, isFavoritePoint } from '../util.js';
+import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, getDuration, isSelectedOffers, isFavoritePoint } from '../util/point.js';
+import { getTimeFromMins } from '../util/common.js';
 
 function createOfferTemplate(pointOffers) {
 
