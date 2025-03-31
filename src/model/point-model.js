@@ -1,4 +1,4 @@
-import { mockPoints } from '../mock/point.js';
+//import { mockPoints } from '../mock/point.js';
 import { mockDestinations } from '../mock/destination.js';
 import { mockOffers } from '../mock/offer.js';
 
@@ -15,7 +15,8 @@ export default class PointsModel {
   }
 
   init() {
-    this.#points = mockPoints;
+    //this.#points = mockPoints;
+    this.#points = [];
     this.#destinations = mockDestinations();
     this.#offers = mockOffers();
   }
