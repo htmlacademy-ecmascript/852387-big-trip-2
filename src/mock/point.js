@@ -1,3 +1,4 @@
+import {nanoid} from 'nanoid';
 import { getRandomInteger, createIdGenerator, getRandomArrayElement, isTrue, randomDate } from '../utils/common.js';
 import { POINTS_COUNT, TYPES } from './const.js';
 import { offersChecked } from './offer.js';
@@ -24,7 +25,11 @@ const mockPoints = Array.from({length: POINTS_COUNT}, createPoint);
 // JSON.stringify(mockPoints, null, 2);
 
 function getRandomPoint() {
-  return getRandomArrayElement(mockPoints);
+  //return getRandomArrayElement(mockPoints);
+  return {
+    id: nanoid(),
+    ...getRandomArrayElement(mockPoints)
+  };
 }
 
 export { getRandomPoint, mockPoints };
