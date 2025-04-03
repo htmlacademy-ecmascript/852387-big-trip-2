@@ -49,5 +49,10 @@ function randomDate(start, end) {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
+function updateItem(items, update) {
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
 export { getRandomArrayElement, getRandomInteger, createIdGenerator,
-  getTimeFromMins, getIdList, isTrue, getMultipleRandom, getCapitalizeWord, randomDate };
+  getTimeFromMins, getIdList, isTrue, getMultipleRandom, getCapitalizeWord,
+  randomDate, updateItem };
