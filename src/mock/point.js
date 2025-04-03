@@ -18,6 +18,7 @@ const createPoint = () => ({
   'type': TYPES[getRandomInteger(0, TYPES.length - 1)],
 });
 
+//const mockPoints = [];
 const mockPoints = Array.from({length: POINTS_COUNT}, createPoint);
 
 // JSON.stringify(mockPoints, null, 2);
