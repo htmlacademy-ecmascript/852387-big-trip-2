@@ -22,5 +22,12 @@ const FilterType = {
                    у которых дата окончания маршрута меньше, чем текущая. */
 };
 
+const SortTypes = [
+  'day',
+  'event',
+  'time',
+  'price',
+  'offer'
+];
 
-export { DEFAULT_POINT, FilterType };
+export { DEFAULT_POINT, FilterType, SortTypes };
