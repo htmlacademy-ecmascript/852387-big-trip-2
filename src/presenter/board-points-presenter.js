@@ -32,7 +32,9 @@ export default class BoardPointsPresenter {
   }
 
   #handlePointChange = (updatedPoint) => {
+    console.log(updatedPoint);
     this.#points = updateItem(this.#points, updatedPoint);
+
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
@@ -44,6 +46,7 @@ export default class BoardPointsPresenter {
 
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListComponent.element,
+      onDataChange: this.#handlePointChange
     });
 
     pointPresenter.init(point, this.#destinations, this.#offers);
