@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { SortTypes } from '../const.js';
+import { SortType } from '../const.js';
 import { getCapitalizeWord } from '../utils/common.js';
 
 function createSortItemTemplate(type) {
@@ -12,15 +12,32 @@ function createSortItemTemplate(type) {
 }
 
 function createSortTemplate() {
-  const sortItemsTemplate = SortTypes.map((sortType) => createSortItemTemplate(sortType)).join('');
+  const sortItemsTemplate = Object.entries(SortType).map(([sortType,]) => createSortItemTemplate(sortType.toLowerCase())).join('');
   return ` <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             ${sortItemsTemplate}
           </form>`;
 }
 
 export default class SortView extends AbstractView {
+  #handleSortTypeChange = null;
+
+  constructor({onSortTypeChange}) {
+    super();
+    this.#handleSortTypeChange = onSortTypeChange;
+
+    this.element.addEventListener('click', this.#sortTypeChangeHandler);
+  }
 
   get template() {
     return createSortTemplate();
   }
+
+  #sortTypeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'DIV') {
+      return;
+    }
+
+    evt.preventDefault();
+    this.#handleSortTypeChange(evt.target.dataset.sortType);
+  };
 }
