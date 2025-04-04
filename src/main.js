@@ -17,7 +17,6 @@ pointsModel.init();
 const filters = generateFilter(pointsModel.points);
 
 render(new FilterView({ filters }), tripControlFilter);
-//render(new SortView(), containerTripEvents);
 
 const boardPointsPresenter = new BoardPointsPresenter({
   container: containerTripEvents,
