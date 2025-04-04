@@ -3,7 +3,6 @@ import { getCapitalizeWord } from '../utils/common.js';
 
 function createFilterItemTemplate(filter, isChecked) {
   const {type, count} = filter;
-  console.log(isChecked);
   return (`<div class="trip-filters__filter">
             <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}" ${isChecked ? 'checked' : ''}
        ${count === 0 ? 'disabled' : ''}>

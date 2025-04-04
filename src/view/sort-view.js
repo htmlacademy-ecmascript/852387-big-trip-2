@@ -3,7 +3,6 @@ import { SortType } from '../const.js';
 import { getCapitalizeWord } from '../utils/common.js';
 
 function createSortItemTemplate(type, isChecked) {
-  console.log(isChecked);
   return (`<div class="trip-sort__item  trip-sort__item--${type}">
             <input id="sort-${type}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
             value="sort-${type}" data-sort-type="${type}"
