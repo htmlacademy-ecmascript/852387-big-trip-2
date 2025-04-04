@@ -16,6 +16,7 @@ export default class PointsModel {
 
   init() {
     this.#points = Array.from({length: POINT_COUNT}, getRandomPoint);
+    //console.log(this.#points);
     //this.#points = [];
     this.#destinations = mockDestinations();
     this.#offers = mockOffers();
