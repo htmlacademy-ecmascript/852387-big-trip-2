@@ -18,7 +18,7 @@ export default class BoardPointsPresenter {
   #destinations = [];
   #offers = [];
   #pointPresenters = new Map();
-  #currentSortType = 'day';
+  #currentSortType = SortType.DAY;
   #sourcedBoardPoints = [];
 
   constructor({container, pointsModel}) {
@@ -30,7 +30,6 @@ export default class BoardPointsPresenter {
     this.#points = [...this.#pointsModel.points];
     this.#destinations = [...this.#pointsModel.destinations];
     this.#offers = [...this.#pointsModel.offers];
-
     // сохрани исходный массив:
     this.#sourcedBoardPoints = [...this.#pointsModel.points];
 
@@ -56,6 +55,7 @@ export default class BoardPointsPresenter {
         this.#points.sort(sortDatePointDown);
         break;
       case SortType.PRICE:
+        //console.log(this.#points.sort(sortPricePoint));
         this.#points.sort(sortPricePoint);
         break;
       case SortType.TIME:
@@ -79,6 +79,8 @@ export default class BoardPointsPresenter {
     // - Сортируем задачи
     // - Очищаем список
     // - Рендерим список заново
+    this.#clearPointList();
+    this.#renderPointList();
   };
 
   #renderSort() {
@@ -112,8 +114,6 @@ export default class BoardPointsPresenter {
   #clearPointList() {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
-    //this.#renderedPointCount = TASK_COUNT_PER_STEP;
-    //remove(this.#loadMoreButtonComponent);
   }
 
   #renderPointList() {

@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { SortType } from '../const.js';
 import { getDuration } from './point.js';
 
 // Функция помещает задачи без даты в конце списка,
@@ -22,28 +21,19 @@ function getWeightForNullData(dataA, dataB) {
 
 function sortDatePointDown(pointA, pointB) {
   const weight = getWeightForNullData(pointA.dateFrom, pointB.dateFrom);
-
   return weight ?? dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom));
 }
 
 function sortPricePoint(pointA, pointB) {
   const weight = getWeightForNullData(pointA.basePrice, pointB.basePrice);
-
-  return weight ?? pointA.basePrice - pointB.basePrice;
+  return weight ?? pointB.basePrice - pointA.basePrice;
 }
 
 function sortTimeTrip(pointA, pointB) {
-  const durationA = getDuration(pointA.dataFrom, pointA.dataTo);
-  const durationB = getDuration(pointB.dataFrom, pointB.dataTo);
-  const weight = getWeightForNullData(durationA, durationB);
-
-  return weight ?? durationA - durationB;
+  const durationA = getDuration(pointA.dateFrom, pointA.dateTo);
+  const durationB = getDuration(pointB.dateFrom, pointB.dateTo);
+  const weight = getWeightForNullData(durationB, durationA);
+  return weight ?? durationB - durationA;
 }
 
-const sort = {
-  [SortType.DAY]: (pointA, pointB) => sortDatePointDown(pointA, pointB),
-  [SortType.TIME]: (pointA, pointB) => sortTimeTrip(pointA, pointB),
-  [SortType.PRICE]: (pointA, pointB) => sortPricePoint(pointA, pointB)
-};
-
-export { sort, sortDatePointDown, sortPricePoint, sortTimeTrip };
+export { sortDatePointDown, sortPricePoint, sortTimeTrip };
