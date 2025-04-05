@@ -47,7 +47,13 @@ export default class PointPresenter {
       destinations: this.#destinations,
       offers: this.#offers,
       onFormSubmit: this.#handleFormSubmit,
-      onClick: this.#handleSubmit
+      onClick: this.#handleSubmit,
+      // changeType: this.#handleTypeChange,
+      // changeDastination: this.#handleDastinationChange,
+      // changeDateFrom: this.#handleDateFromChange,
+      // changeDateTo: this.#handleDateToChange,
+      // changePrice: this.#handlePriceChange,
+      // checkOffers: this.#handleOffersCheck
     });
 
     //render(this.#pointComponent, this.#pointListContainer);
@@ -113,6 +119,13 @@ export default class PointPresenter {
   // #handleArchiveClick = () => {
   // this.#handleDataChange({...this.#task, isArchive: !this.#task.isArchive});
   // };
+
+  // #handleTypeChange = () => {};
+  // #handleDastinationChange = () => {};
+  // #handleDateFromChange = () => {};
+  // #handleDateToChange = () => {};
+  // #handlePriceChange = () => {};
+  // #handleOffersCheck = () => {};
 
   #handleFormSubmit = (point) => {
     this.#handleDataChange(point);
