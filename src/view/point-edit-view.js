@@ -202,8 +202,8 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
-  #changeDateFromHandler = (evt) => {};
-  #changeDateToHandler = (evt) => {};
+  #changeDateFromHandler = () => {};
+  #changeDateToHandler = () => {};
 
   #changePriceHandler = (evt) => {
     evt.preventDefault();
