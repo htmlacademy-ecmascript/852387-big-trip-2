@@ -135,6 +135,8 @@ export default class PointEditView extends AbstractStatefulView {
   #offers = null;
   #handleFormSubmit = null;
   #onCLick = null;
+  #datepickerFrom = null;
+  #datepickerTo = null;
 
   constructor({point = DEFAULT_POINT, destinations, offers, onFormSubmit, onClick}) {
     super();
@@ -151,6 +153,23 @@ export default class PointEditView extends AbstractStatefulView {
   get template() {
     return createPointEditTemplate(this._state, this.#destinations, this.#offers);
   }
+
+  // Перегружаем метод родителя removeElement,
+  // чтобы при удалении удалялся более не нужный календарь
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+
+    if(this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
+  }
+
 
   reset(point) {
     this.updateElement(
@@ -204,8 +223,17 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
-  #changeDateFromHandler = () => {};
-  #changeDateToHandler = () => {};
+  #changeDateFromHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate,
+    });
+  };
+
+  #changeDateToHandler = ([userDate]) => {
+    this.updateElement({
+      dateTo: userDate,
+    });
+  };
 
   #changePriceHandler = (evt) => {
     evt.preventDefault();
@@ -228,6 +256,32 @@ export default class PointEditView extends AbstractStatefulView {
       offers: offersState,
     });
   };
+
+
+  #setDateFrompicker() {
+    // flatpickr есть смысл инициализировать только в случае,
+    // если поле выбора даты доступно для заполнения
+    this.#datepickerFrom = flatpickr(
+      this.element.querySelector('input[name="event-start-time"]'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._state.dateFrom,
+        onChange: this.#changeDateFromHandler, // На событие flatpickr передаём наш колбэк
+      },
+    );
+  }
+
+  #setDateTopicker() {
+    this.#datepickerTo = flatpickr(
+      this.element.querySelector('input[name="event-end-time"]'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._state.dateTo,
+        onChange: this.#changeDateToHandler,
+      }
+    );
+  }
+
 
   static parsePointToState(point) {
     return {...point,
