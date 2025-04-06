@@ -4,9 +4,9 @@ const DEFAULT_POINT = {
   basePrice: 0,
   dateFrom: new Date().toISOString(),
   dateTo: new Date().toISOString(),
-  destination: 0,
+  destination: null,
   isFavorite: false,
-  offers: [],
+  offers: null,
   type: TYPES[0]
 };
 
