@@ -3,6 +3,9 @@ import { DEFAULT_POINT } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizePointDate, DATETIME_FORMAT_NEW } from '../utils/point.js';
 import { getCapitalizeWord } from '../utils/common.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createTypeItemTemplate(currentType) {
   return TYPES.map((pointType) => `<div class="event__type-item">
