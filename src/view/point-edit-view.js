@@ -150,6 +150,12 @@ export default class PointEditView extends AbstractStatefulView {
     return createPointEditTemplate(this._state, this.#destinations, this.#offers);
   }
 
+  reset(point) {
+    this.updateElement(
+      PointEditView.parsePointToState(point),
+    );
+  }
+
   _restoreHandlers() {
     this.element.querySelector('.event__rollup-btn')
       .addEventListener('click', this.#clickHandler);
@@ -181,8 +187,6 @@ export default class PointEditView extends AbstractStatefulView {
 
   #changeTypePointHandler = (evt) => {
     evt.preventDefault();
-    //this._setState({
-    console.log(evt.target);
     this.updateElement({
       type: getCapitalizeWord(evt.target.value),
     });

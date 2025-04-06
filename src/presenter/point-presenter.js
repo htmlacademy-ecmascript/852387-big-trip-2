@@ -48,15 +48,8 @@ export default class PointPresenter {
       offers: this.#offers,
       onFormSubmit: this.#handleFormSubmit,
       onClick: this.#handleSubmit,
-      // changeType: this.#handleTypeChange,
-      // changeDastination: this.#handleDastinationChange,
-      // changeDateFrom: this.#handleDateFromChange,
-      // changeDateTo: this.#handleDateToChange,
-      // changePrice: this.#handlePriceChange,
-      // checkOffers: this.#handleOffersCheck
     });
 
-    //render(this.#pointComponent, this.#pointListContainer);
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#pointListContainer);
       return;
@@ -83,6 +76,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   }
@@ -103,6 +97,7 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   };
@@ -116,23 +111,13 @@ export default class PointPresenter {
     this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };
 
-  // #handleArchiveClick = () => {
-  // this.#handleDataChange({...this.#task, isArchive: !this.#task.isArchive});
-  // };
-
-  // #handleTypeChange = () => {};
-  // #handleDastinationChange = () => {};
-  // #handleDateFromChange = () => {};
-  // #handleDateToChange = () => {};
-  // #handlePriceChange = () => {};
-  // #handleOffersCheck = () => {};
-
   #handleFormSubmit = (point) => {
     this.#handleDataChange(point);
     this.#replaceFormToCard();
   };
 
   #handleSubmit = () => {
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToCard();
   };
 }
