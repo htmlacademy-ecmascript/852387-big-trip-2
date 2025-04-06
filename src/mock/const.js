@@ -9,7 +9,7 @@ const TYPES = [
 
 const CITIES = ['Chamonix', 'Bath', 'Liverpool', 'Barcelona', 'Singapore', 'Dallas', 'Caracas', 'Moscow', 'SPB'];
 
-const TITLE_OFFERS = ['Upgrade to a business class', 'Add luggage', 'conditioner', 'WI-FI',
+const TITLE_OFFERS = ['Upgrade to a business class', 'Add luggage', 'conditioner', 'WIFI',
   'Switch to comfort', 'Order an Uber', 'Rent a car', 'Add breakfast', 'Travel by train',
   'Choose places', 'Choose the radio station'];
 
