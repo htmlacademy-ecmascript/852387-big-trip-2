@@ -186,14 +186,12 @@ export default class PointEditView extends AbstractStatefulView {
       .addEventListener('change', this.#changeTypePointHandler);
     this.element.querySelector('input[list="destination-list-1"]') // input city/name destination
       .addEventListener('change', this.#changeNameDestinationHandler);
-    this.element.querySelector('input[name="event-start-time"]')
-      .addEventListener('change', this.#changeDateFromHandler);
-    this.element.querySelector('input[name="event-end-time"]')
-      .addEventListener('change', this.#changeDateToHandler);
     this.element.querySelector('.event__input--price')
       .addEventListener('change', this.#changePriceHandler);
     this.element.querySelector('.event__section--offers')
       .addEventListener('change', this.#checkOffersHandler);
+
+    this.#setDatepicker();
   }
 
   #formSubmitHandler = (evt) => {
@@ -223,16 +221,18 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
-  #changeDateFromHandler = ([userDate]) => {
+  #dateFromHandler = ([userDateFrom]) => {
     this.updateElement({
-      dateFrom: userDate,
+      dateFrom: userDateFrom,
     });
+    this.#datepickerTo.set('minDate', userDateFrom);
   };
 
-  #changeDateToHandler = ([userDate]) => {
+  #dateToHandler = ([userDateTo]) => {
     this.updateElement({
-      dateTo: userDate,
+      dateTo: userDateTo,
     });
+    this.#datepickerFrom.set('maxDate', userDateTo);
   };
 
   #changePriceHandler = (evt) => {
@@ -257,29 +257,37 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
+  #setDatepicker() {
+    const [dateFromElement, dateToElement] = this.element.querySelectorAll('.event__input--time');
+    const commonConfig = {
+      minuteIncrement: 1,
+      enableTime: true,
+      dateFormat: 'd/m/y H:i',
+      'time_24hr': true
+    };
 
-  #setDateFrompicker() {
-    // flatpickr есть смысл инициализировать только в случае,
-    // если поле выбора даты доступно для заполнения
     this.#datepickerFrom = flatpickr(
-      this.element.querySelector('input[name="event-start-time"]'),
+      dateFromElement,
       {
-        dateFormat: 'j F',
+        ...commonConfig,
+        dateFormat: 'm/d/Y',
+        maxDate: this._state.dateTo,
         defaultDate: this._state.dateFrom,
-        onChange: this.#changeDateFromHandler, // На событие flatpickr передаём наш колбэк
-      },
-    );
-  }
-
-  #setDateTopicker() {
-    this.#datepickerTo = flatpickr(
-      this.element.querySelector('input[name="event-end-time"]'),
-      {
-        dateFormat: 'j F',
-        defaultDate: this._state.dateTo,
-        onChange: this.#changeDateToHandler,
+        onClose: this.#dateFromHandler,
       }
     );
+
+    this.#datepickerTo = flatpickr(
+      dateToElement,
+      {
+        ...commonConfig,
+        dateFormat: 'm/d/Y',
+        minDate: this._state.dateFrom,
+        defaultDate: this._state.dateTo,
+        onClose: this.#dateToHandler,
+      }
+    );
+
   }
 
 
