@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { render, remove } from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import PointListView from '../view/point-list-view.js';
 import NoPointView from '../view/no-point-view.js';
@@ -91,9 +91,13 @@ export default class BoardPointsPresenter {
         break;
       case UpdateType.MINOR:
         // - обновить список (например, когда задача ушла в архив)
+        this.#clearBoard();
+        this.#renderBoard();
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
+        this.#clearBoard({resetRenderedPointCount: true, resetSortType: true});
+        this.#renderBoard();
         break;
     }
   };
@@ -107,12 +111,15 @@ export default class BoardPointsPresenter {
     // - Сортируем задачи
     // - Очищаем список
     // - Рендерим список заново
-    this.#clearPointList();
-    this.#renderPointList();
+    //this.#clearPointList();
+    //this.#renderPointList();
+    this.#clearBoard({resetRenderedPointCount: true});
+    this.#renderBoard();
   };
 
   #renderSort() {
     this.#sortComponent = new SortView({
+      currentSortType: this.#currentSortType,
       onSortTypeChange: this.#handleSortTypeChange
     });
 
@@ -149,15 +156,48 @@ export default class BoardPointsPresenter {
     this.#renderPoints();
   }
 
+  #clearBoard({resetSortType = false} = {}) {
+    //const pointCount = this.points.length;
+
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noPointComponent);
+    //remove(this.#loadMoreButtonComponent);
+
+    // if (resetRenderedPointCount) {
+    // this.#renderedPointCount = TASK_COUNT_PER_STEP;
+    // } else {
+    // На случай, если перерисовка доски вызвана
+    // уменьшением количества задач (например, удаление или перенос в архив)
+    // нужно скорректировать число показанных задач
+    // this.#renderedPointCount = Math.min(pointCount, this.#renderedPointCount);
+    // }
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DAY;
+    }
+  }
+
   #renderBoard() {
     render(this.#pointListComponent, this.#mainContainer);
+    const points = this.points;
+    const pointCount = points.length;
 
-    if (this.points.length === 0) {
+    if (pointCount === 0) {
       this.#renderNoPoints();
       return;
     }
 
     this.#renderSort();
     this.#renderPointList();
+    //render(this.#pointListComponent, this.#mainContainer);
+
+    // Теперь, когда #renderBoard рендерит доску не только на старте,
+    // но и по ходу работы приложения, нужно заменить
+    // константу TASK_COUNT_PER_STEP на свойство #renderedTaskCount,
+    // чтобы в случае перерисовки сохранить N-показанных карточек
+    //this.#renderPoints(points.slice(0, Math.min(pointCount, this.#renderedPointCount)));
   }
 }
