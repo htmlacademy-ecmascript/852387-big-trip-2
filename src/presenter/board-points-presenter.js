@@ -36,6 +36,19 @@ export default class BoardPointsPresenter {
     this.#renderBoard();
   }
 
+  get points() {
+    return this.#pointsModel.points;
+  }
+
+
+  get destinations() {
+    return this.#destinations;
+  }
+
+  get offers() {
+    return this.#offers;
+  }
+
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
