@@ -38,6 +38,10 @@ function isPastPoint(data) {
   return dayjs().isAfter(dayjs(data), 'D');
 }
 
+function isDatesEqual(dateA, dateB) {
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+}
+
 export { DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, DATETIME_FORMAT_NEW,
   humanizePointDate, getDuration, isSelectedOffers, isFavoritePoint,
-  isFurutePoint, isPesentPoint, isPastPoint };
+  isFurutePoint, isPesentPoint, isPastPoint, isDatesEqual };

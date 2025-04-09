@@ -135,10 +135,11 @@ export default class PointEditView extends AbstractStatefulView {
   #offers = null;
   #handleFormSubmit = null;
   #onCLick = null;
+  #handleDeleteClick = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor({point = DEFAULT_POINT, destinations, offers, onFormSubmit, onClick}) {
+  constructor({point = DEFAULT_POINT, destinations, offers, onFormSubmit, onClick, onDeleteClick}) {
     super();
     this._setState(PointEditView.parsePointToState(point));
     this.#destinations = destinations;
@@ -146,6 +147,7 @@ export default class PointEditView extends AbstractStatefulView {
 
     this.#handleFormSubmit = onFormSubmit;
     this.#onCLick = onClick;
+    this.#handleDeleteClick = onDeleteClick;
 
     this._restoreHandlers();
   }
@@ -190,6 +192,9 @@ export default class PointEditView extends AbstractStatefulView {
       .addEventListener('change', this.#changePriceHandler);
     this.element.querySelector('.event__section--offers')
       .addEventListener('change', this.#checkOffersHandler);
+    this.element.querySelector('.event__reset-btn')
+      .addEventListener('click', this.#formDeleteClickHandler);
+
 
     this.#setDatepicker();
   }
@@ -238,13 +243,13 @@ export default class PointEditView extends AbstractStatefulView {
   #changePriceHandler = (evt) => {
     evt.preventDefault();
     this._setState({
-      basePrice: evt.target.value,
+      basePrice: Number(evt.target.value),
     });
   };
 
   #checkOffersHandler = (evt) => {
     evt.preventDefault();
-    const checkOffer = evt.target.dataset.offerId;
+    const checkOffer = Number(evt.target.dataset.offerId);
     let offersState = this._state.offers;
 
     if (offersState.includes(checkOffer)) {
@@ -290,6 +295,10 @@ export default class PointEditView extends AbstractStatefulView {
 
   }
 
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(PointEditView.parseStateToPoint(this._state));
+  };
 
   static parsePointToState(point) {
     return {...point,
@@ -311,5 +320,7 @@ export default class PointEditView extends AbstractStatefulView {
 
     delete point.hasOffer;
     delete point.hasDescription;
+
+    return point;
   }
 }

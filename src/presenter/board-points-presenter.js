@@ -87,7 +87,7 @@ export default class BoardPointsPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         // - обновить часть списка (например, когда поменялось описание)
-        this.#pointPresenters.get(data.id).init(data);
+        this.#pointPresenters.get(data.id).init(data, this.#destinations, this.#offers);
         break;
       case UpdateType.MINOR:
         // - обновить список (например, когда задача ушла в архив)
@@ -146,10 +146,10 @@ export default class BoardPointsPresenter {
     render(this.#noPointComponent, this.#mainContainer);
   }
 
-  #clearPointList() {
-    this.#pointPresenters.forEach((presenter) => presenter.destroy());
-    this.#pointPresenters.clear();
-  }
+  // #learPointList() {
+  // this.#pointPresenters.forEach((presenter) => presenter.destroy());
+  // this.#pointPresenters.clear();
+  // }
 
   #renderPointList() {
     render(this.#pointListComponent, this.#mainContainer);

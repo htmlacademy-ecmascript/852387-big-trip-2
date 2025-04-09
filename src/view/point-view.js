@@ -35,7 +35,6 @@ function createOfferTemplate(pointOffers) {
 function createPointTemplate(point, destinations, offers) {
 
   const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
-
   const typeOffers = offers.find((item) => item.type === point.type).offers;
   const pointCheckedOffers = typeOffers.filter((typeOffer) => point.offers.includes(typeOffer.id));
   const pointDestination = destinations.find((item) => item.id === point.destination);
