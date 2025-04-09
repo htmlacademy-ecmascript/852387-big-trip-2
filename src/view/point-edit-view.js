@@ -222,14 +222,12 @@ export default class PointEditView extends AbstractStatefulView {
     const city = evt.target.value;
     const isPointDestination = this.#destinations.map((item) => item.name).includes(city);
     const pointDest = this.#destinations.find((item) => item.name === city);
-    console.log(isPointDestination);
     this._setState({
       destination: Number(pointDest.id),
     });
     this.updateElement({
       destination: isPointDestination ? Number(pointDest.id) : 0,
     });
-    console.log(this._state);
   };
 
   #dateFromHandler = ([userDateFrom]) => {
@@ -248,7 +246,6 @@ export default class PointEditView extends AbstractStatefulView {
 
   #changePriceHandler = (evt) => {
     evt.preventDefault();
-    console.log(evt.target.value);
     this._setState({
       basePrice: Number(evt.target.value),
     });
