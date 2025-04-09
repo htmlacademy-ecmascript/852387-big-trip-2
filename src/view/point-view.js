@@ -34,10 +34,10 @@ function createOfferTemplate(pointOffers) {
 
 function createPointTemplate(point, destinations, offers) {
 
-  const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
-  const typeOffers = offers.find((item) => item.type === point.type).offers;
-  const pointCheckedOffers = typeOffers.filter((typeOffer) => point.offers.includes(typeOffer.id));
-  const pointDestination = destinations.find((item) => item.id === point.destination);
+  const {basePrice, dateFrom, dateTo, isFavorite, type, offers: offersId, destination: destinationId} = point;
+  const typeOffers = offers.find((item) => item.type === type).offers;
+  const pointCheckedOffers = typeOffers.filter((typeOffer) => offersId.includes(typeOffer.id)) || false;
+  const pointDestination = destinations.find((item) => item.id === destinationId) || [];
 
   const dateStart = humanizePointDate(dateFrom, DATE_FORMAT);
   const timeStart = humanizePointDate(dateFrom, TIME_FORMAT);

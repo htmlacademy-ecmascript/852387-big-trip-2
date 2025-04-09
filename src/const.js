@@ -1,12 +1,14 @@
 import { TYPES } from './mock/const.js';
+//import { nanoid } from 'nanoid';
 
 const DEFAULT_POINT = {
+  // id: nanoid(),
   basePrice: 0,
   dateFrom: new Date().toISOString(),
   dateTo: new Date().toISOString(),
   destination: null,
   isFavorite: false,
-  offers: null,
+  offers: [],
   type: TYPES[0]
 };
 

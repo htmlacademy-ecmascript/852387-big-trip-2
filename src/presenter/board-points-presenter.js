@@ -3,6 +3,7 @@ import SortView from '../view/sort-view.js';
 import PointListView from '../view/point-list-view.js';
 import NoPointView from '../view/no-point-view.js';
 import PointPresenter from './point-presenter.js';
+import NewPointPresenter from './new-point-presenter.js';
 import { sortDatePointDown, sortPricePoint, sortTimeTrip } from '../utils/sort.js';
 import {filter} from '../utils/filter.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
@@ -18,13 +19,20 @@ export default class BoardPointsPresenter {
   #destinations = [];
   #offers = [];
   #pointPresenters = new Map();
+  #newPointPresenter = null;
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
 
-  constructor({container, pointsModel, filterModel}) {
+  constructor({container, pointsModel, filterModel, onNewPointDestroy}) {
     this.#mainContainer = container;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
+
+    this.#newPointPresenter = new NewPointPresenter({
+      pointListContainer: this.#pointListComponent.element,
+      onDataChange: this.#handleViewAction,
+      onDestroy: onNewPointDestroy
+    });
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -62,7 +70,15 @@ export default class BoardPointsPresenter {
     this.#renderBoard();
   }
 
+  createPoint() {
+    this.#currentSortType = SortType.DAY;
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#clearBoard({resetSortType: true});
+    this.#newPointPresenter.init(this.#destinations, this.offers);
+  }
+
   #handleModeChange = () => {
+    this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
@@ -105,7 +121,7 @@ export default class BoardPointsPresenter {
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
-        this.#clearBoard({resetRenderedPointCount: true, resetSortType: true});
+        this.#clearBoard({ resetSortType: true});
         this.#renderBoard();
         break;
     }
@@ -120,7 +136,7 @@ export default class BoardPointsPresenter {
     // - Сортируем задачи
     // - Очищаем список
     // - Рендерим список заново
-    this.#clearBoard({resetRenderedPointCount: true});
+    this.#clearBoard();
     this.#renderBoard();
   };
 
@@ -162,8 +178,9 @@ export default class BoardPointsPresenter {
     this.#renderPoints();
   }
 
-  #clearBoard({resetSortType = false} = {}) {
+  #clearBoard({ resetSortType = false} = {}) {
 
+    this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 
