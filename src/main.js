@@ -8,13 +8,6 @@ import PointsModel from './model/point-model.js';
 import FilterModel from './model/filter-model.js';
 //import { generateFilter } from './mock/filter.js';
 
-// const filters = [
-// {
-// type: 'all',
-// count: 0,
-// },
-// ];
-
 const body = document.body;
 const siteHeaderElement = body.querySelector('.page-header');
 const tripMain = siteHeaderElement.querySelector('.trip-main');
@@ -25,27 +18,18 @@ const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
 pointsModel.init();
 
-//const filters = generateFilter(pointsModel.points);
-
-//render(new FilterView({ filters }), tripControlFilter);
-// render(new FilterView({
-// filters,
-// currentFilterType: 'all',
-// onFilterTypeChange: () => {}
-// }), tripMain);
-
-//render(new NewPointButtonView(), tripMain);
-
-const boardPointsPresenter = new BoardPointsPresenter({
-  container: containerTripEvents,
-  pointsModel,
-});
-
 const filterPresenter = new FilterPresenter({
   filterContainer: tripMain,
   filterModel,
   pointsModel
 });
+
+const boardPointsPresenter = new BoardPointsPresenter({
+  container: containerTripEvents,
+  pointsModel,
+  filterModel,
+});
+
 
 filterPresenter.init();
 boardPointsPresenter.init();

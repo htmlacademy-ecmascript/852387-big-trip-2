@@ -4,10 +4,12 @@ import PointListView from '../view/point-list-view.js';
 import NoPointView from '../view/no-point-view.js';
 import PointPresenter from './point-presenter.js';
 import { sortDatePointDown, sortPricePoint, sortTimeTrip } from '../utils/sort.js';
+import {filter} from '../utils/filter.js';
 import { SortType, UpdateType, UserAction } from '../const.js';
 export default class BoardPointsPresenter {
   #mainContainer = null;
   #pointsModel = null;
+  #filterModel = null;
 
   #pointListComponent = new PointListView();
   #sortComponent = null;
@@ -18,30 +20,30 @@ export default class BoardPointsPresenter {
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
 
-  constructor({container, pointsModel}) {
+  constructor({container, pointsModel, filterModel}) {
     this.#mainContainer = container;
     this.#pointsModel = pointsModel;
+    this.#filterModel = filterModel;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
-  }
-
-  init() {
-    this.#destinations = [...this.#pointsModel.destinations];
-    this.#offers = [...this.#pointsModel.offers];
-
-    this.#renderBoard();
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+
+    const filterType = this.#filterModel.filter;
+    const points = this.#pointsModel.points;
+    const filteredPoints = filter[filterType](points);
+
     switch (this.#currentSortType) {
       case SortType.DAY:
-        return [...this.#pointsModel.points].sort(sortDatePointDown);
+        return filteredPoints.sort(sortDatePointDown);
       case SortType.PRICE:
-        return [...this.#pointsModel.points].sort(sortPricePoint);
+        return filteredPoints.sort(sortPricePoint);
       case SortType.TIME:
-        return [...this.#pointsModel.points].sort(sortTimeTrip);
+        return filteredPoints.sort(sortTimeTrip);
     }
-    return this.#pointsModel.points;
+    return filteredPoints;
   }
 
 
@@ -51,6 +53,12 @@ export default class BoardPointsPresenter {
 
   get offers() {
     return this.#offers;
+  }
+
+  init() {
+    this.#destinations = [...this.#pointsModel.destinations];
+    this.#offers = [...this.#pointsModel.offers];
+    this.#renderBoard();
   }
 
   #handleModeChange = () => {
@@ -111,8 +119,6 @@ export default class BoardPointsPresenter {
     // - Сортируем задачи
     // - Очищаем список
     // - Рендерим список заново
-    //this.#clearPointList();
-    //this.#renderPointList();
     this.#clearBoard({resetRenderedPointCount: true});
     this.#renderBoard();
   };
@@ -146,34 +152,18 @@ export default class BoardPointsPresenter {
     render(this.#noPointComponent, this.#mainContainer);
   }
 
-  // #learPointList() {
-  // this.#pointPresenters.forEach((presenter) => presenter.destroy());
-  // this.#pointPresenters.clear();
-  // }
-
   #renderPointList() {
     render(this.#pointListComponent, this.#mainContainer);
     this.#renderPoints();
   }
 
   #clearBoard({resetSortType = false} = {}) {
-    //const pointCount = this.points.length;
 
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 
     remove(this.#sortComponent);
     remove(this.#noPointComponent);
-    //remove(this.#loadMoreButtonComponent);
-
-    // if (resetRenderedPointCount) {
-    // this.#renderedPointCount = TASK_COUNT_PER_STEP;
-    // } else {
-    // На случай, если перерисовка доски вызвана
-    // уменьшением количества задач (например, удаление или перенос в архив)
-    // нужно скорректировать число показанных задач
-    // this.#renderedPointCount = Math.min(pointCount, this.#renderedPointCount);
-    // }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
@@ -192,12 +182,5 @@ export default class BoardPointsPresenter {
 
     this.#renderSort();
     this.#renderPointList();
-    //render(this.#pointListComponent, this.#mainContainer);
-
-    // Теперь, когда #renderBoard рендерит доску не только на старте,
-    // но и по ходу работы приложения, нужно заменить
-    // константу TASK_COUNT_PER_STEP на свойство #renderedTaskCount,
-    // чтобы в случае перерисовки сохранить N-показанных карточек
-    //this.#renderPoints(points.slice(0, Math.min(pointCount, this.#renderedPointCount)));
   }
 }

@@ -275,7 +275,7 @@ export default class PointEditView extends AbstractStatefulView {
       dateFromElement,
       {
         ...commonConfig,
-        dateFormat: 'm/d/Y',
+        dateFormat: 'd/m/Y',
         maxDate: this._state.dateTo,
         defaultDate: this._state.dateFrom,
         onClose: this.#dateFromHandler,
@@ -286,7 +286,7 @@ export default class PointEditView extends AbstractStatefulView {
       dateToElement,
       {
         ...commonConfig,
-        dateFormat: 'm/d/Y',
+        dateFormat: 'd/m/Y',
         minDate: this._state.dateFrom,
         defaultDate: this._state.dateTo,
         onClose: this.#dateToHandler,
