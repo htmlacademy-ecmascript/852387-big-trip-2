@@ -3,7 +3,7 @@ import { TYPES } from './mock/const.js';
 
 const DEFAULT_POINT = {
   // id: nanoid(),
-  basePrice: 0,
+  basePrice: '',
   dateFrom: new Date().toISOString(),
   dateTo: new Date().toISOString(),
   destination: null,
