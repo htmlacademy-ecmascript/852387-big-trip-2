@@ -1,7 +1,7 @@
 //import SortView from './view/sort-view.js';
 //import FilterView from './view/filter-view.js';
-//import NewPointButtonView from './view/new-point-button-view.js';
-//import { render } from './framework/render.js';
+import NewPointButtonView from './view/new-point-button-view.js';
+import { render } from './framework/render.js';
 import BoardPointsPresenter from './presenter/board-points-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import PointsModel from './model/point-model.js';
@@ -28,8 +28,24 @@ const boardPointsPresenter = new BoardPointsPresenter({
   container: containerTripEvents,
   pointsModel,
   filterModel,
+  onNewTaskDestroy: handleNewPointFormClose
 });
+
+const newPointButtonComponent = new NewPointButtonView({
+  onClick: handleNewPointButtonClick
+});
+
+function handleNewPointFormClose() {
+  newPointButtonComponent.element.disabled = false;
+}
+
+function handleNewPointButtonClick() {
+  boardPointsPresenter.createTask();
+  newPointButtonComponent.element.disabled = true;
+}
 
 
 filterPresenter.init();
 boardPointsPresenter.init();
+
+render(newPointButtonComponent, tripMain);

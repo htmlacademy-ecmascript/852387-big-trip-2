@@ -63,8 +63,6 @@ export default class PointsModel extends Observble {
 
   deletePoint(updateType, update) {
     const index = this.#points.findIndex((point) => point.id === update.id);
-    console.log('update', update);
-    console.log('updateType', updateType);
 
     if (index === -1) {
       throw new Error('Can\'t delete unexisting point');
