@@ -1,5 +1,10 @@
-import { TYPES } from './mock/const.js';
-//import { nanoid } from 'nanoid';
+const TYPES = [
+  'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight',
+  'Check-in', 'Sightseeing', 'Restaurant'
+];
+
+const CITIES = ['Chamonix', 'Bath', 'Liverpool', 'Barcelona', 'Singapore', 'Dallas', 'Caracas', 'Moscow', 'SPB'];
+
 
 const DEFAULT_POINT = {
   // id: nanoid(),
@@ -42,6 +47,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
-export { DEFAULT_POINT, FilterType, SortType, UserAction, UpdateType };
+export { TYPES, CITIES, DEFAULT_POINT, FilterType, SortType, UserAction, UpdateType };

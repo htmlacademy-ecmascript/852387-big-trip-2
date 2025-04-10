@@ -1,4 +1,6 @@
-
+function generateRandomString(length) {
+  return Math.random().toString(36).substring(2, length + 2);
+}
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -55,4 +57,4 @@ function randomDate(start, end) {
 
 export { getRandomArrayElement, getRandomInteger, createIdGenerator,
   getTimeFromMins, getIdList, isTrue, getMultipleRandom, getCapitalizeWord,
-  randomDate};
+  randomDate, generateRandomString};
