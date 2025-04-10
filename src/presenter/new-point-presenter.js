@@ -9,8 +9,8 @@ export default class NewPointPresenter {
   #handleDestroy = null;
 
   #pointEditComponent = null;
-  #destinations = null;
-  #offers = null;
+  #destinations = [];
+  #offers = [];
 
   constructor({pointListContainer, onDataChange, onDestroy}) {
     this.#pointListContainer = pointListContainer;
@@ -65,9 +65,9 @@ export default class NewPointPresenter {
     this.destroy();
   };
 
-  #handleSubmit = () => {
-    this.#pointEditComponent.reset(this.#pointEditComponent);
-  };
+  // #handleSubmit = () => {
+  // this.#pointEditComponent.reset(this.#pointEditComponent);
+  // };
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {

@@ -17,8 +17,8 @@ export default class PointPresenter {
   #pointEditComponent = null;
 
   #point = null;
-  #destinations = null;
-  #offers = null;
+  #destinations = [];
+  #offers = [];
   #mode = Mode.DEFAULT;
 
   constructor({pointListContainer, onDataChange, onModeChange}) {
