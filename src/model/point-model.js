@@ -1,46 +1,56 @@
 import Observble from '../framework/observable.js';
-import { getRandomPoint } from '../mock/point.js';
-import { mockDestinations } from '../mock/destination.js';
-import { mockOffers } from '../mock/offer.js';
+//import { getRandomPoint } from '../mock/point.js';
+//import { mockDestinations } from '../mock/destination.js';
+//import { mockOffers } from '../mock/offer.js';
 
-const POINT_COUNT = 5;
+//const POINT_COUNT = 5;
 export default class PointsModel extends Observble {
   #pointsApiService = null;
-  #points = null;
-  #destinations = null;
-  #offers = null;
+  #points = [];
+  #destinations = [];
+  #offers = [];
 
   constructor({pointsApiService}) {
     super();
     this.#pointsApiService = pointsApiService;
-    this.#pointsApiService.points.then((points) => {
-      console.log(points.map(this.#adaptToClient));
+    // this.#pointsApiService.points.then((points) => {
+    // console.log(points.map(this.#adaptToClient));
     // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
     // а ещё на сервере используется snake_case, а у нас camelCase.
     // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
     // Есть вариант получше - паттерн "Адаптер"
-    });
+    //});
 
     //this.#destinationsApiService = destinationsApiServise;
-    this.#pointsApiService.destinations.then((destinations) => {
-      console.log(destinations);
-    });
+    // this.#pointsApiService.destinations.then((destinations) => {
+    // console.log(destinations);
+    // });
 
     //this.#offersApiServise = offersApiServise;
-    this.#pointsApiService.offers.then((offers) => {
-      console.log(offers);
-    });
+    // this.#pointsApiService.offers.then((offers) => {
+    // console.log(offers);
+    // });
 
-    this.#points = [];
-    this.#destinations = [];
-    this.#offers = [];
+    // this.#points = [];
+    // this.#destinations = [];
+    // this.#offers = [];
   }
 
-  init() {
-    this.#points = Array.from({length: POINT_COUNT}, getRandomPoint);
-    //this.#points = [];
-    this.#destinations = mockDestinations();
-    this.#offers = mockOffers();
+  async init() {
+    try {
+      const points = await this.#pointsApiService.points;
+      this.#points = points.map(this.#adaptToClient);
+
+      const destinations = await this.#pointsApiService.destinations;
+      this.#destinations = destinations;
+
+      const offers = await this.#pointsApiService.offers;
+      this.#offers = offers;
+    } catch(err) {
+      this.#points = [];
+      this.#destinations = [];
+      this.#offers = [];
+    }
   }
 
   get points() {
