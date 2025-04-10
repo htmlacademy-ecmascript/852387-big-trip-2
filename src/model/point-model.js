@@ -1,4 +1,5 @@
 import Observble from '../framework/observable.js';
+import { UpdateType } from '../const.js';
 //import { getRandomPoint } from '../mock/point.js';
 //import { mockDestinations } from '../mock/destination.js';
 //import { mockOffers } from '../mock/offer.js';
@@ -51,6 +52,8 @@ export default class PointsModel extends Observble {
       this.#destinations = [];
       this.#offers = [];
     }
+
+    this._notify(UpdateType.INIT);
   }
 
   get points() {
