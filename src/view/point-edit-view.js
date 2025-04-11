@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import he from 'he';
 import { DEFAULT_POINT, TYPES } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
@@ -5,6 +6,12 @@ import { humanizePointDate, DATETIME_FORMAT_NEW } from '../utils/point.js';
 import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
+
+function createRollupBtnTemplate() {
+  return `<button class="event__rollup-btn" type="button">
+           <span class="visually-hidden">Close event</span>
+          </button>`;
+}
 
 function createTypeItemTemplate(currentType) {
 
@@ -117,10 +124,12 @@ function createPointEditTemplate(point, destinations, offers) {
               </div>
 
               <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-              <button class="event__reset-btn" type="reset">Delete</button>
-              <button class="event__rollup-btn" type="button">
-                <span class="visually-hidden">Open event</span>
-              </button>
+              <button class="event__reset-btn" type="reset">${point.hasOwnProperty('id') ? 'Delete' : 'Cancel'}</button>
+               ${point.hasOwnProperty('id') ? createRollupBtnTemplate() : ''}
+
+
+
+
             </header>
             <section class="event__details">
               ${offerTemplate}
@@ -183,8 +192,10 @@ export default class PointEditView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#clickHandler);
+    if (this._state.id) {
+      this.element.querySelector('.event__rollup-btn')
+        .addEventListener('click', this.#clickHandler);
+    }
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group') // change type
@@ -309,8 +320,8 @@ export default class PointEditView extends AbstractStatefulView {
 
   static parsePointToState(point) {
     return {...point,
-      hasOffer: point.type !== null,
-      hasDestination: point.destination !== null,
+      hasOffer: point.type !== '',
+      hasDestination: point.destination !== '',
     };
   }
 
@@ -327,6 +338,7 @@ export default class PointEditView extends AbstractStatefulView {
 
     delete point.hasOffer;
     delete point.hasDestination;
+
 
     return point;
   }
