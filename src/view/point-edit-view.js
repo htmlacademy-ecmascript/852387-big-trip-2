@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import he from 'he';
 import { DEFAULT_POINT, TYPES } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
@@ -5,6 +6,36 @@ import { humanizePointDate, DATETIME_FORMAT_NEW } from '../utils/point.js';
 import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
+
+function createBtnsTemplate(isDisabled, isSaving, isDeleting, isPointId) {
+  let signature = '';
+  if (!isPointId) {
+    signature = 'Cancel';
+  } else if (isDeleting) {
+    signature = 'Deleting...';
+  } else {
+    signature = 'Delete';
+  }
+
+  return (`
+        <button class="event__save-btn  btn  btn--blue" type="submit"
+          ${ isDisabled ? 'disabled' : ''}>
+          ${isSaving ? 'saving...' : 'Save'}
+        </button>
+        <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>
+          ${signature}
+
+
+
+
+
+        </button>
+          ${isPointId ? `<button class="event__rollup-btn" type="button">
+        <span class="visually-hidden">Close event</span>
+        </button>` : ''}
+`);
+}
+
 
 function createTypeItemTemplate(currentType) {
 
@@ -60,15 +91,27 @@ function createPointEditDescriptionTeplate(pointDescription) {
 }
 
 function createPointEditTemplate(point, destinations, offers) {
-  const {basePrice, dateFrom, dateTo, type, offers: offersId, destination: destinationId} = point;
+  const {
+    basePrice,
+    dateFrom,
+    dateTo,
+    type,
+    offers: offersId,
+    destination: destinationId,
+    isDisabled,
+    isSaving,
+    isDeleting
+  } = point;
   const sities = destinations.map((item) => item.name);
   // const overPrice () {}
   const typeOffers = offers.find((item) => item.type === type.toLowerCase()).offers || [];
   const pointDestination = destinations.find((item) => item.id === destinationId) || '';
+  const isPointId = point.hasOwnProperty('id');
 
   const offerTemplate = createPointEditOfferTemplate(typeOffers, offersId); // offersId = point.offers?
   const destinationTemplate = createPointEditDescriptionTeplate(pointDestination);
 
+  const btnsTemplate = createBtnsTemplate(isDisabled, isSaving, isDeleting, isPointId);
   const dateTimeStart = humanizePointDate(dateFrom, DATETIME_FORMAT_NEW);
   const dateTimeEnd = humanizePointDate(dateTo, DATETIME_FORMAT_NEW);
 
@@ -94,7 +137,9 @@ function createPointEditTemplate(point, destinations, offers) {
                 <label class="event__label  event__type-output" for="event-destination-1">
                   ${type}
                 </label>
-                <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(pointDestination.name || '')}" list="destination-list-1" required>
+                <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination"
+                value="${he.encode(pointDestination.name || '')}" list="destination-list-1" required
+                ${isDisabled ? 'disabled' : ''}>
                 <datalist id="destination-list-1">
                   ${sities.map((sity) => `<option value="${sity}"></option>`).join('')}
                 </datalist>
@@ -116,11 +161,9 @@ function createPointEditTemplate(point, destinations, offers) {
                 <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${he.encode(basePrice.toString())}">
               </div>
 
-              <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-              <button class="event__reset-btn" type="reset">Delete</button>
-              <button class="event__rollup-btn" type="button">
-                <span class="visually-hidden">Open event</span>
-              </button>
+
+                ${btnsTemplate}
+
             </header>
             <section class="event__details">
               ${offerTemplate}
@@ -183,8 +226,10 @@ export default class PointEditView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#clickHandler);
+    if (this._state.id) {
+      this.element.querySelector('.event__rollup-btn')
+        .addEventListener('click', this.#clickHandler);
+    }
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group') // change type
@@ -309,8 +354,11 @@ export default class PointEditView extends AbstractStatefulView {
 
   static parsePointToState(point) {
     return {...point,
-      hasOffer: point.type !== null,
-      hasDestination: point.destination !== null,
+      hasOffer: point.type !== '',
+      hasDestination: point.destination !== '',
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
     };
   }
 
@@ -327,6 +375,10 @@ export default class PointEditView extends AbstractStatefulView {
 
     delete point.hasOffer;
     delete point.hasDestination;
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+
 
     return point;
   }

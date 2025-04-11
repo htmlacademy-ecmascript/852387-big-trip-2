@@ -8,13 +8,14 @@ const CITIES = ['Chamonix', 'Bath', 'Liverpool', 'Barcelona', 'Singapore', 'Dall
 
 const DEFAULT_POINT = {
   // id: nanoid(),
-  basePrice: '',
-  dateFrom: new Date().toISOString(),
-  dateTo: new Date().toISOString(),
+  basePrice: 0,
+  dateFrom: new Date(),
+  dateTo: new Date(),
   destination: null,
   isFavorite: false,
   offers: [],
-  type: TYPES[0]
+  type: 'taxi',
+  //isNew: true,
 };
 
 const FilterType = {

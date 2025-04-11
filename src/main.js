@@ -1,5 +1,5 @@
 import { render } from './framework/render.js';
-import { generateRandomString } from './utils/common.js';
+// import { generateRandomString } from './utils/common.js';
 import BoardPointsPresenter from './presenter/board-points-presenter.js';
 import NewPointButtonView from './view/new-point-button-view.js';
 import FilterPresenter from './presenter/filter-presenter.js';
@@ -7,7 +7,7 @@ import PointsModel from './model/point-model.js';
 import FilterModel from './model/filter-model.js';
 import PointsApiService from './points-api-service.js';
 
-const AUTHORIZATION = `Basic ${generateRandomString(32)}`;
+const AUTHORIZATION = 'Basic er883jdzbdwu8yt6vg';
 const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const body = document.body;
@@ -53,7 +53,6 @@ filterPresenter.init();
 boardPointsPresenter.init();
 pointsModel.init()
   .finally(() => {
-    render(newPointButtonComponent, siteHeaderElement);
+    render(newPointButtonComponent, tripMain);
   });
 
-render(newPointButtonComponent, tripMain);
