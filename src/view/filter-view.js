@@ -22,11 +22,11 @@ function createFilterTemplate(filterItems, currentFilterType) {
       <div class="trip-controls__filters">
         <h2 class="visually-hidden">Filter events</h2>
         <form class="trip-filters" action="#" method="get">
-        ${filterItemsTemplate}
-          <button class="visually-hidden" type="submit">Accept filter</button>
+            ${filterItemsTemplate}
+        <button class="visually-hidden" type="submit">Accept filter</button>
         </form>
       </div>
-    </div`
+    </div>`
   );
 }
 export default class FilterView extends AbstractView {
@@ -34,7 +34,7 @@ export default class FilterView extends AbstractView {
   #currentFilter = null;
   #handleFilterTypeChange = null;
 
-  constructor({filters, currentFilterType, onFilterTypeChange}) {
+  constructor({filters, onFilterTypeChange, currentFilterType}) {
     super();
     this.#filters = filters;
     this.#currentFilter = currentFilterType;
@@ -49,6 +49,6 @@ export default class FilterView extends AbstractView {
 
   #filterTypeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFilterTypeChange(evt.target.value);
+    this.#handleFilterTypeChange(evt.target.value.toLocaleUpperCase());
   };
 }

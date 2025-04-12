@@ -25,6 +25,7 @@ export default class PointsModel extends Observble {
 
   async init() {
     try {
+
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
 
@@ -33,12 +34,20 @@ export default class PointsModel extends Observble {
 
       const offers = await this.#pointsApiService.offers;
       this.#offers = offers;
+      // await Promise.all([this.#pointsApiService.points,
+        // this.#pointsApiService.destinations,
+        // this.#pointsApiService.offers]).then(([points, destinations, offers]) => {
+        // this.#points = points.map(this.#adaptToClient);
+        // this.#destinations = destinations;
+        // this.#offers = offers;
+      // });
+
     } catch(err) {
       this.#points = [];
       this.#destinations = [];
       this.#offers = [];
+      this._notify(UpdateType.FAILED);
     }
-
     this._notify(UpdateType.INIT);
   }
 
@@ -70,10 +79,26 @@ export default class PointsModel extends Observble {
       const newPoint = this.#adaptToClient(response);
       this.#points = [newPoint, ...this.#points];
 
-      this._notify(updateType, newPoint);
+      this._notify(updateType, update); ///update ->newPoint
     } catch(err) {
       throw new Error('Can\'t add point');
     }
+  }
+
+  getDestinationById(id) {
+    return this.destinations.find((dest) => dest.id === id);
+  }
+
+  getOffersById(idData, type) {
+    const typedOffers = this.offers.find((offer) => offer.type === type).offers;
+    return typedOffers.filter((offer) => idData.some((id) => offer.id === id));
+  }
+
+  getDestinationsNames() {
+    return this.destinations.reduce((destinations, destElement) => {
+      destinations.push(destElement.name);
+      return destinations;
+    }, []);
   }
 
   async deletePoint(updateType, update) {
@@ -97,12 +122,13 @@ export default class PointsModel extends Observble {
     }
   }
 
+
   #adaptToClient(point) {
     const adaptedPoint = {...point,
       basePrice: point['base_price'],
       // На клиенте дата хранится как экземпляр Date,
-      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
-      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      dateFrom: point['date_from'],
+      dateTo: point['date_to'],
       isFavorite: point['is_favorite'],
     };
 

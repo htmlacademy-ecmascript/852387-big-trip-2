@@ -1,12 +1,5 @@
 import ApiService from './framework/api-service.js';
-
-const Method = {
-  GET: 'GET',
-  PUT: 'PUT',
-  POST: 'POST',
-  DELETE: 'DELETE',
-};
-
+import { Method } from './const.js';
 export default class PointsApiService extends ApiService {
   get points() {
     return this._load({url: 'points'})
@@ -60,7 +53,7 @@ export default class PointsApiService extends ApiService {
 
   #adaptToServer(point) {
     const adaptedPoint = {...point,
-      'base_price': point.basePrice,
+      'base_price': point.basePrice, //Number()
       // На сервере дата хранится в ISO формате
       'date_from': point.dateFrom instanceof Date ? point.dateFrom.toISOString() : null,
       'date_to': point.dateTo instanceof Date ? point.dateTo.toISOString() : null,

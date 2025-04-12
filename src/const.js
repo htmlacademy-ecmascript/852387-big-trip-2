@@ -1,3 +1,10 @@
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
 const TYPES = [
   'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight',
   'Check-in', 'Sightseeing', 'Restaurant'
@@ -14,8 +21,8 @@ const DEFAULT_POINT = {
   destination: null,
   isFavorite: false,
   offers: [],
-  type: 'taxi',
-  //isNew: true,
+  type: 'flight',
+  isNew: true,
 };
 
 const FilterType = {
@@ -49,6 +56,17 @@ const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
+  FAILED: 'FAILED',
 };
 
-export { TYPES, CITIES, DEFAULT_POINT, FilterType, SortType, UserAction, UpdateType };
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
+export {Method, TYPES, CITIES, DEFAULT_POINT, FilterType, SortType, UserAction, UpdateType, Mode, TimeLimit };
