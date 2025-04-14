@@ -13,13 +13,10 @@ const getFilterPoints = (items, type) => {
     case FilterType.EVERYTHING:
       return items;
     case FilterType.FUTURE:
-console.log(items.length);
       return items.filter((point) => isFurutePoint(point.dateFrom));
     case FilterType.PRESENT:
-console.log(items.length);
       return items.filter((point) => isPesentPoint(point.dateFrom, point.dateTo));
     case FilterType.PAST:
-console.log(items.length);
       return items.filter((point) => isPastPoint(point.dateTo));
   }
   return items;

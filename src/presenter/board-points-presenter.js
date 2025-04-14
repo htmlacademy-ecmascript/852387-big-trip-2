@@ -15,27 +15,26 @@ import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../cons
 import FailedLoadingView from '../view/failed-loading-view.js';
 
 export default class BoardPointsPresenter {
-  #destinations = null; //
-  #pointsContainer = null; // eventsContainer
-  #pointsModel = null; //
-  #filterModel = null; //
 
-  #pointListComponent = null; //
-  #loadingComponent = new LoadingView(); //
-  #sortComponent = null; //
-  #noPointComponent = null; //
-  #newPointBtnComponent = null; //
-  #newPointBtnContainer = null; //
-
-  //#offers = []; ??
-  #infoPresenter = null; //
-  #pointPresenters = new Map(); //
-  #newPointPresenter = null; //
+  #pointsContainer = null; // /container
+  #pointsModel = null; ///
+  #filterModel = null; ///
+  #destinations = null;
+  #pointListComponent = null; ///
+  #loadingComponent = null; ///
+  #sortComponent = null; /// sortElement
+  #noPointComponent = null;
+  #newPointBtnComponent = null;
+  #newPointBtnContainer = null;
+  #infoPresenter = null;
+  #pointPresenters = new Map(); ///
+  #newPointPresenter = null;
   #currentSortType = SortType.DAY; //
   #currentFilterType = FilterType.EVERYTHING;
   #isLoading = true; //
-  #uiBlocker = null; //
-  #failedLoadingComponent = null;
+  #uiBlocker = null;
+
+  #failedLoadingComponent = null; ///
 
   constructor({container, pointsModel, filterModel, newPointBtnContainer, headerInfoPresenter}) {
     this.#pointsContainer = container;
@@ -45,18 +44,18 @@ export default class BoardPointsPresenter {
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
     this.#destinations = [...this.#pointsModel.destinations];
+    this.#uiBlocker = new UiBlocker ({
+      lowerLimit: TimeLimit.LOWER_LIMIT,
+      upperLimit: TimeLimit.UPPER_LIMIT
+    });
     // this.#newPointPresenter = new NewPointPresenter({
-    // pointListContainer: this.#pointListComponent.element,
+    // pointListContainer: this.#pointListComponent.element,`
     // onDataChange: this.#handleViewAction,
     // onDestroy: onNewPointDestroy
     // });
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
-    this.#uiBlocker = new UiBlocker({ //
-      lowerLimit: TimeLimit.LOWER_LIMIT,
-      upperLimit: TimeLimit.UPPER_LIMIT
-    });
   }
 
   get points() {
@@ -77,14 +76,6 @@ export default class BoardPointsPresenter {
 
   init() {
     this.#newPointBtnComponent = new NewPointButtonView({ onClick: this.#newPointBtnClickHandler });
-    //this.#currentSortType = SortType.DAY;
-    //this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    //this.#clearBoard({resetSortType: true});
-    // if (this.#noPointComponent) {
-    // remove(this.#noPointComponent);
-    // }
-    //this.#newPointPresenter.init(this.destinations, this.offers);
-
     render(this.#newPointBtnComponent, this.#newPointBtnContainer);
     render(this.#pointListComponent, this.#pointsContainer);
     this.#renderPoints();
@@ -97,11 +88,11 @@ export default class BoardPointsPresenter {
     }
   }
 
-  #activateNewPointBtn() {
+  #activateNewPointBtn () {
     this.#newPointBtnComponent.activate();
   }
 
-  #disableNewPointBtn() {
+  #disableNewPointBtn () {
     this.#newPointBtnComponent.disable();
   }
 
@@ -109,11 +100,10 @@ export default class BoardPointsPresenter {
 
     if (!this.#newPointPresenter) {
       const newPointPresenter = new NewPointPresenter({
-        listComponent: this.#pointListComponent,
+        pointListComponent: this.#pointListComponent,
         pointsModel: this.#pointsModel,
-        destinations: this.#destinations,
         onDataChange: this.#handleViewAction,
-        handleCloseClick: () => {
+        onDestroy: () => {
           this.#activateNewPointBtn();
           if (this.points.length === 0) {
             this.#clearNoPoint();
@@ -132,9 +122,8 @@ export default class BoardPointsPresenter {
   }
 
   #resetPoints = () => {
-    this.#pointPresenters.forEach((presenter) => presenter.resetView());
     this.#newPointPresenter?.destroy();
-
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
   #clearPointsList() {
@@ -148,9 +137,8 @@ export default class BoardPointsPresenter {
     const pointPresenter = new PointPresenter({
       listComponent: this.#pointListComponent,
       pointsModel: this.#pointsModel,
-      destinations: this.#destinations,
       onDataChange: this.#handleViewAction,
-      onModeChange: this.#resetPoints,
+      onModeChange: this.#resetPoints
     });
 
     this.#pointPresenters.set(point.id, pointPresenter);
@@ -159,8 +147,10 @@ export default class BoardPointsPresenter {
   }
 
   #createNoPoint() {
-    this.#noPointComponent = new NoPointView(this.#filterModel.filter);
-    render(this.#noPointComponent, this.#pointsContainer);
+    this.#noPointComponent = new NoPointView({
+      filterType: this.#currentFilterType
+    }); //замена (this.#filterModel.filter)
+    render(this.#noPointComponent, this.#pointsContainer, RenderPosition.AFTERBEGIN); /////
   }
 
   #renderPoints() {
@@ -170,6 +160,7 @@ export default class BoardPointsPresenter {
       this.#renderLoading();
       return;
     }
+
     if (points.length === 0) {
       this.#createNoPoint();
       remove(this.#sortComponent);
@@ -182,12 +173,12 @@ export default class BoardPointsPresenter {
 
   #renderLoading() {
     this.#loadingComponent = new LoadingView();
-    render(this.#loadingComponent, this.#pointListComponent.element);   /// element
+    render(this.#loadingComponent, this.#pointListComponent.element, RenderPosition.AFTERBEGIN);
   }
 
   #renderFailedLoading() {
     this.#failedLoadingComponent = new FailedLoadingView();
-    render(this.#failedLoadingComponent, this.#pointListComponent.element);     ///element
+    render(this.#failedLoadingComponent, this.#pointListComponent.element, RenderPosition.AFTERBEGIN);
   }
 
   #clearLoading() {
@@ -211,9 +202,9 @@ export default class BoardPointsPresenter {
     this.#desactivateNewPointBtn();
 
     switch (actionType) {
-      case UserAction.ADD_POINT:
+      case UserAction.ADD_EVENT:
         this.#newPointPresenter.setSaving();
-        this.#pointsModel.addPoint(updateType, update).catch(() => {
+        this.#pointsModel.addEvent(updateType, update).catch(() => {
           this.#newPointPresenter.setAborting();
         }).finally(() => {
           this.#uiBlocker.unblock();
@@ -221,10 +212,10 @@ export default class BoardPointsPresenter {
         });
         break;
 
-      case UserAction.DELETE_POINT:
+      case UserAction.DELETE_EVENT:
         this.#pointPresenters.get(update.id).setDeleting();
 
-        this.#pointsModel.deletePoint(updateType, update).catch(() => {
+        this.#pointsModel.deleteEvent(updateType, update).catch(() => {
           this.#pointPresenters.get(update.id).setAborting();
         }).finally(() => {
           this.#uiBlocker.unblock();
@@ -233,10 +224,10 @@ export default class BoardPointsPresenter {
         });
         break;
 
-      case UserAction.UPDATE_POINT:
+      case UserAction.UPDATE_EVENT:
         this.#pointPresenters.get(update.id).setSaving();
 
-        this.#pointsModel.updatePoint(updateType, update).catch(() => {
+        this.#pointsModel.updateEvent(updateType, update).catch(() => {
           this.#pointPresenters.get(update.id).setAborting();
 
         }).finally(() => {
@@ -258,14 +249,12 @@ export default class BoardPointsPresenter {
         break;
 
       case UpdateType.MINOR:
-
         this.#clearPointsList();
         this.#clearNoPoint();
         this.#renderPoints();
         break;
 
       case UpdateType.MAJOR:
-
         this.#clearPointsList();
         this.#clearNoPoint();
         this.initSort();
@@ -290,15 +279,15 @@ export default class BoardPointsPresenter {
         break;
     }
     this.#infoPresenter.init(this.#pointsModel.points);
-
-
   };
 
   #handleSortChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
     this.#currentSortType = sortType;
     this.#clearPointsList();
     this.#renderPoints();
-
   };
 
   #newPointBtnClickHandler = () => {

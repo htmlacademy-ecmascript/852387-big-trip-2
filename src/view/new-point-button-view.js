@@ -33,9 +33,9 @@ export default class NewPointButtonView extends AbstractView {
 
   }
 
-  #newPointsButtonCLickHandler(evt) {
+  #newPointsButtonCLickHandler = (evt) => {
     evt.preventDefault();
-  }
+  };
 
   // #clickHandler = (evt) => {
   // evt.preventDefault();

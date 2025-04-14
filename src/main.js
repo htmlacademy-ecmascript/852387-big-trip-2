@@ -37,23 +37,8 @@ const boardPointsPresenter = new BoardPointsPresenter({
   headerInfoPresenter: infoPresenter
 });
 
-////////////////////////////////////////////////////////////
-// const newPointButtonComponent = new NewPointButtonView({ onClick: handleNewPointButtonClick });
-//
-// function handleNewPointFormClose() {
-  // newPointButtonComponent.element.disabled = false;
-// }
-//
-// function handleNewPointButtonClick() {
-  // boardPointsPresenter.createPoint();
-  // newPointButtonComponent.element.disabled = true;
-// }
-
-
 boardPointsPresenter.init();
 pointsModel.init();
-  // .finally(() => {
-    // render(newPointButtonComponent, tripMain);
-  // });
+
 filterPresenter.init();
 

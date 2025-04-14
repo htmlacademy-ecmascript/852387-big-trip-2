@@ -61,11 +61,11 @@ export default class HeaderInfoPresenter {
     }
 
     const uniqueDestinations = points.reduce((names, point, index) => {
-      const destinationName = this.#pointsModel.getDestinationById(point.destination).name;
+      const cities = this.#pointsModel.getDestinationById(point.destination).name;
       if (names.length === 0) {
-        names.push(destinationName);
-      } else if (!(names[index - 1] === destinationName)) {
-        names.push(destinationName);
+        names.push(cities);
+      } else if (!(names[index - 1] === cities)) {
+        names.push(cities);
       }
       return names;
     }, []);

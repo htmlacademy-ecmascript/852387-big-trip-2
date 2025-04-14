@@ -88,6 +88,16 @@ const getDestinationByName = (destinations, destName) => destinations.find((dest
 
 const getOffersByType = (offers, type) => offers.find((offer) => offer.type === type).offers;
 
+const getNewPoint = () => ({
+  basePrice: 0,
+  type: 'flight',
+  dateFrom: null,
+  dateTo: null,
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  isNew: true
+});
 
 function convertToISO(dateTimeString) {
 
@@ -108,4 +118,4 @@ export { DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, DATETIME_FORMAT_NEW,
   humanizePointDate, getDuration, isSelectedOffers, isFavoritePoint,
   isFurutePoint, isPesentPoint, isPastPoint, isDatesEqual, getOffersSumm,
   getDatetime, getDiffTime, getOnlyDate, humanizePointTime, convertToISO,
-  toKebabCase, getDestinationByName, getOffersByType, DateTemplates, getTimeFromTemplate };
+  toKebabCase, getDestinationByName, getOffersByType, DateTemplates, getTimeFromTemplate, getNewPoint};

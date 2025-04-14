@@ -6,6 +6,7 @@ export default class PointsModel extends Observble {
   #destinations = [];
   #offers = [];
 
+  #isDataLOadind = false;
   constructor({pointsApiService}) {
     super();
     this.#pointsApiService = pointsApiService;
@@ -23,6 +24,10 @@ export default class PointsModel extends Observble {
     return this.#offers;
   }
 
+  get isDataLoaded() {
+    return this.#isDataLOadind;
+  }
+
   async init() {
     try {
 
@@ -34,13 +39,6 @@ export default class PointsModel extends Observble {
 
       const offers = await this.#pointsApiService.offers;
       this.#offers = offers;
-      // await Promise.all([this.#pointsApiService.points,
-        // this.#pointsApiService.destinations,
-        // this.#pointsApiService.offers]).then(([points, destinations, offers]) => {
-        // this.#points = points.map(this.#adaptToClient);
-        // this.#destinations = destinations;
-        // this.#offers = offers;
-      // });
 
     } catch(err) {
       this.#points = [];
@@ -80,7 +78,7 @@ export default class PointsModel extends Observble {
       this.#points = [newPoint, ...this.#points];
 
       this._notify(updateType, update); ///update ->newPoint
-    } catch(err) {
+    } catch {
       throw new Error('Can\'t add point');
     }
   }

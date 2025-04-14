@@ -6,12 +6,11 @@ import { isDatesEqual } from '../utils/point.js';
 
 export default class PointPresenter {
   #listComponent = null; //listComponnet
-  #handleDataChange = null; //jndatachange
   #handleModeChange = null; //
   #pointComponent = null; //
   #pointEditComponent = null; //editForm
   #pointsModel = null; //
-
+  #handleDataChange = null;
   #point = null; //
   #mode = Mode.DEFAULT; //
   #cities = null; //
@@ -24,7 +23,7 @@ export default class PointPresenter {
     this.#cities = this.#pointsModel.getDestinationsNames();
   }
 
-  init(point) {
+  init = (point) => {
     this.#point = point;
     const type = point.type;
     const fullDestination = this.#pointsModel.getDestinationById(point.destination);
@@ -41,7 +40,6 @@ export default class PointPresenter {
       point,
       fullDestination,
       fullOffers,
-      //onEditClick: this.#handleEditClick,
       onOpenClick: () => {
         this.#replaceCardToForm();
         document.addEventListener('keydown', this.#onEscKeyDown);
@@ -52,16 +50,16 @@ export default class PointPresenter {
     this.#pointEditComponent = new PointEditView({
       point,
       fullDestination,
-      offers,
       destinations,
+      offers,
       cities: this.#cities,
-      onDeleteClick: this.#handleDeleteClick,
-      onFormSubmit: this.#handleFormSubmit,
-      onCloseClick: () => {
+      onFormClose: () => {
         this.#pointEditComponent.reset();
         this.#replaceFormToCard();
         document.removeEventListener('keydown', this.#onEscKeyDown);
-      }
+      },
+      onFormSubmit: this.#handleFormSubmit,
+      onDeleteClick: this.#handleDeleteClick,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -77,16 +75,15 @@ export default class PointPresenter {
 
     if (this.#mode === Mode.EDITING) {
       replace(this.#pointEditComponent, prevPointEditComponent);
-      this.#mode = Mode.DEFAULT;
     }
 
     remove(prevPointComponent);
     remove(prevPointEditComponent);
-  }
+  };
 
   destroy() {
-    remove(this.#pointComponent);
     remove(this.#pointEditComponent);
+    remove(this.#pointComponent);
   }
 
   resetView() {
@@ -138,13 +135,13 @@ export default class PointPresenter {
   }
 
 
-  #replaceCardToForm() {
+  #replaceCardToForm = () => {
     replace(this.#pointEditComponent, this.#pointComponent);
     this.#handleModeChange();
     this.#mode = Mode.EDITING;
-  }
+  };
 
-  #replaceFormToCard() {
+  #replaceFormToCard () {
     replace(this.#pointComponent, this.#pointEditComponent);
     this.#mode = Mode.DEFAULT;
   }
@@ -158,10 +155,6 @@ export default class PointPresenter {
     }
   };
 
-  // #handleEditClick = () => {
-  // this.#replaceCardToForm();
-  // };
-
   #handleFavoriteClick = () => {
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
@@ -173,10 +166,10 @@ export default class PointPresenter {
   #handleFormSubmit = (update) => {
     // Проверяем, поменялись ли в задаче данные, которые попадают под фильтрацию,
     // а значит требуют перерисовки списка - если таких нет, это PATCH-обновление
-    const isMinorUpdate = (!isDatesEqual(this.#point.dateFrom, update.dateFrom) || !isDatesEqual(this.#point.dateTo, update.dateTo))
-      || this.#point.basePrice !== update.basePrice;
+    const isMinorUpdate = (!isDatesEqual(this.#point.dateFrom, update.dateFrom) ||
+                          !isDatesEqual(this.#point.dateTo, update.dateTo))
+                          || this.#point.basePrice !== update.basePrice;
 
-    //this.#handleDataChange(point);
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
@@ -194,11 +187,6 @@ export default class PointPresenter {
     );
 
     document.removeEventListener('keydown', this.#onEscKeyDown);
-    //this.#replaceFormToCard();
   };
 
-  #handleSubmit = () => {
-    this.#pointEditComponent.reset(this.#point);
-    this.#replaceFormToCard();
-  };
 }
