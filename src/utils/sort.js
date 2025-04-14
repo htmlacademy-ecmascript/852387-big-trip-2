@@ -19,21 +19,42 @@ function getWeightForNullData(dataA, dataB) {
   return null;
 }
 
-function sortDatePointDown(pointA, pointB) {
-  const weight = getWeightForNullData(pointA.dateFrom, pointB.dateFrom);
+const sortPoints = {
+
+  DAY: (points) => points.slice().sort((pointA, pointB) => dayjs(pointA.dateFrom) - dayjs(pointB.dateFrom)),
+
+  PRICE: (points) => points.slice().sort((pointA, pointB) => pointB.basePrice - pointA.basePrice),
+
+  TIME: (points) => points.slice().sort((pointA, pointB) => dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom)) - dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom)))
+};
+// function sortDate(pointA, pointB) {
+//
+  // return dayjs(pointA.dateFrom) - (dayjs(pointB.dateFrom));
+// }
+//
+// [FilterType.EVERYTHING]: (points) => points.filter((point) => point),
+// [FilterType.FUTURE]: (points) => points.filter((point) => isFurutePoint(point.dateFrom)),
+// [FilterType.PRESENT]: (points) => points.filter((point) => isPesentPoint(point.dateFrom, point.dateTo)),
+// [FilterType.PAST]: (points) => points.filter((point) => isPastPoint(point.dateTo)),
+// };
+
+function sortDate(pointA, pointB) {
+  const weight = getWeightForNullData(pointB.dateFrom, pointA.dateFrom);
   return weight ?? dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom));
 }
 
-function sortPricePoint(pointA, pointB) {
+function sortPrice(pointA, pointB) {
   const weight = getWeightForNullData(pointA.basePrice, pointB.basePrice);
   return weight ?? pointB.basePrice - pointA.basePrice;
 }
 
-function sortTimeTrip(pointA, pointB) {
+function sortTime(pointA, pointB) {
   const durationA = getDuration(pointA.dateFrom, pointA.dateTo);
   const durationB = getDuration(pointB.dateFrom, pointB.dateTo);
   const weight = getWeightForNullData(durationB, durationA);
   return weight ?? durationB - durationA;
 }
 
-export { sortDatePointDown, sortPricePoint, sortTimeTrip };
+//const sortNameAdapter = (sortName) => sortName.toUpperCase().replace('-', '_');
+
+export { sortPoints, sortDate, sortPrice, sortTime};

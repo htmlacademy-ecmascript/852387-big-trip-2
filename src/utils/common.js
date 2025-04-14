@@ -27,9 +27,14 @@ function isTrue () {
 }
 
 function getTimeFromMins(mins) {
-  const hours = Math.trunc(mins / 60);
+  let hours = Math.trunc(mins / 60);
   const minutes = mins % 60;
-  return `${hours}Ч ${minutes}М`;
+  let days = '';
+  if (hours > 24) {
+    days = Math.trunc(hours / 24);
+    hours = hours % 24;
+  }
+  return `${days ? `${days}D` : ''} ${hours ? `${hours}H` : ''} ${minutes}М`;
 }
 
 function getIdList(arr) {

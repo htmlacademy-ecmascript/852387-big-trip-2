@@ -1,125 +1,100 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizePointDate, DATE_FORMAT, TIME_FORMAT, DATETIME_FORMAT, getDuration, isSelectedOffers } from '../utils/point.js';
-import { getTimeFromMins } from '../utils/common.js';
-
+import { getDatetime, getDiffTime, getOnlyDate, humanizePointDate, humanizePointTime } from '../utils/point.js';
+import { getCapitalizeWord } from '../utils/common.js';
 function createOfferTemplate(pointOffers) {
 
   return (
-    `${isSelectedOffers(pointOffers) ?
-      `<h4 class="visually-hidden">
-        <font style="vertical-align: inherit;">
-          <font style="vertical-align: inherit;">Предложения:</font>
-        </font>
-      </h4>
-      <ul class="event__selected-offers">
+    `<ul class="event__selected-offers">
       ${pointOffers.map((offer) =>
       `<li class="event__offer">
         <span class="event__offer-title">
-          <font style="vertical-align: inherit;">
-            <font style="vertical-align: inherit;">${offer.title}</font>
-          </font>
+          ${offer.title}
         </span>
-        <font style="vertical-align: inherit;">
-          <font style="vertical-align: inherit;">+&nbsp;</font>
-        </font>
+        &plus;&euro;&nbsp;
         <span class="event__offer-price">
-          <font style="vertical-align: inherit;">
-            <font style="vertical-align: inherit;">${offer.price} €</font>
-          </font>
+          ${offer.price}
         </span>
-      </li>`).join('')}
-    </ul>` : ''}`
-  );
+      </li>
+    `).join('')}
+    </ul>`);
 }
 
-function createPointTemplate(point, destinations, offers) {
+function createPointTemplate(point, fullDestination, offers) {
 
-  const {basePrice, dateFrom, dateTo, isFavorite, type, offers: offersId, destination: destinationId} = point;
-  const typeOffers = offers.find((item) => item.type === type).offers;
-  const pointCheckedOffers = typeOffers.filter((typeOffer) => offersId.includes(typeOffer.id)) || false;
-  const pointDestination = destinations.find((item) => item.id === destinationId) || [];
+  const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
 
-  const dateStart = humanizePointDate(dateFrom, DATE_FORMAT);
-  const timeStart = humanizePointDate(dateFrom, TIME_FORMAT);
-  const timeEnd = humanizePointDate(dateTo, TIME_FORMAT);
-  const dateTimeStart = humanizePointDate(dateFrom, DATETIME_FORMAT);
-  const dateTimeEnd = humanizePointDate(dateTo, DATETIME_FORMAT);
-  const duration = getDuration(dateFrom, dateTo);
-  const diffTime = getTimeFromMins(duration);
-
-  //const addClassBtnFavorite = isFavoritePoint(isFavorite);
-
-  const favoriteClassName = isFavorite
-    ? 'event__favorite-btn event__favorite-btn--active'
-    : 'event__favorite-btn';
+  const isFavoriteClassName = isFavorite
+    ? 'event__favorite-btn--active'
+    : '';
 
   return (`<li class="trip-events__item">
             <div class="event">
-              <time class="event__date" datetime="${dateStart}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${dateStart}</font></font></time>
+              <time class="event__date" datetime="${getOnlyDate(dateFrom)}">${humanizePointDate(dateFrom)}</time>
               <div class="event__type">
-                <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Значок типа события">
+                <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Значок типа события">
               </div>
-              <h3 class="event__title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${type} ${pointDestination.name}</font></font></h3>
+              <h3 class="event__title">${getCapitalizeWord(type)} ${fullDestination.name}</h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="${dateTimeStart}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${timeStart}</font></font></time><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
-                  —
-                  </font></font><time class="event__end-time" datetime="${dateTimeEnd}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${timeEnd}</font></font></time>
-                </p>
-                <p class="event__duration"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">${diffTime}</font></font></p>
+                    <time class="event__start-time" datetime="${getDatetime(dateFrom)}">${humanizePointTime(dateFrom)}</time>
+                    &mdash;
+                    <time class="event__end-time" datetime="${getDatetime(dateTo)}">${humanizePointTime(dateTo)}</time>
+                  </p>
+                <p class="event__duration">${getDiffTime(dateFrom, dateTo)}</p>
               </div>
-              <p class="event__price"><font style="vertical-align: inherit;"><span class="event__price-value"><font style="vertical-align: inherit;">${basePrice}</font></span><font style="vertical-align: inherit;">
-                евро&nbsp;</font></font><span class="event__price-value"><font style="vertical-align: inherit;"></font></span>
+              <p class="event__price"><span class="event__price-value">${basePrice}</span>
+                евро&nbsp;<span class="event__price-value">
               </p>
+              <h4 class="visually-hidden">Offers:</h4>
 
-              ${createOfferTemplate(pointCheckedOffers)}
+              ${offers.length ? createOfferTemplate(offers) : ''}
 
-              <button class="${favoriteClassName}" type="button">
-                <span class="visually-hidden"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Добавить в избранное</font></font></span>
+              <button class="event__favorite-btn ${isFavoriteClassName}" type="button">
+                <span class="visually-hidden">Добавить в избранное</span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
                   <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
                 </svg>
               </button>
               <button class="event__rollup-btn" type="button">
-                <span class="visually-hidden"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Открытое мероприятие</font></font></span>
+                <span class="visually-hidden">Открытое мероприятие<</span>
               </button>
             </div>
-          </li>`
-  );
+          </li>`);
 }
 
 export default class PointView extends AbstractView {
   #point = null;
-  #destinations = null;
-  #offers = null;
-  #handleEditClick = null;
+  #fullDestination = null;
+  #fullOffers = null;
+  #handleOpenClick = null;
   #handleFavoriteClick = null;
 
-  constructor({ point, destinations, offers, onEditClick, onFavoriteClick }) {
+  constructor({ point, fullDestination, fullOffers, onOpenClick, onFavoriteClick }) {
     super();
     this.#point = point;
-    this.#destinations = destinations;
-    this.#offers = offers;
-    this.#handleEditClick = onEditClick;
+    this.#fullDestination = fullDestination;
+    this.#fullOffers = fullOffers;
+    this.#handleOpenClick = onOpenClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
     this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#editClickHandler);
+      .addEventListener('click', this.#openClickHandler);
     this.element.querySelector('.event__favorite-btn')
       .addEventListener('click', this.#favoriteClickHandler);
   }
 
   get template() {
-    return createPointTemplate(this.#point, this.#destinations, this.#offers);
+    return createPointTemplate(this.#point, this.#fullDestination, this.#fullOffers);
   }
 
-  #editClickHandler = (evt) => {
+  #openClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditClick();
+    this.#handleOpenClick();
   };
 
-  #favoriteClickHandler = (evt) => {
-    evt.preventDefault();
+  #favoriteClickHandler = (event) => {
+    event.preventDefault();
+    this.element.querySelector('button').classList.toggle('event__favorite-btn--active');
     this.#handleFavoriteClick();
   };
 }

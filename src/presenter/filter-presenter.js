@@ -1,16 +1,16 @@
-import {render, replace, remove} from '../framework/render.js';
-import FilterView from '../view/filter-view.js';
-import {filter} from '../utils/filter.js';
-import {FilterType, UpdateType} from '../const.js';
 
+import {render, replace, remove, RenderPosition} from '../framework/render.js';
+import FilterView from '../view/filter-view.js';
+import { getFilterPoints } from '../utils/filter.js';
+import {FilterType, UpdateType} from '../const.js';
 export default class FilterPresenter {
+
   #filterContainer = null;
   #filterModel = null;
   #pointsModel = null;
-
   #filterComponent = null;
 
-  constructor({filterContainer, filterModel, pointsModel}) {
+  constructor({pointsModel, filterModel, filterContainer,}) {
     this.#filterContainer = filterContainer;
     this.#filterModel = filterModel;
     this.#pointsModel = pointsModel;
@@ -29,7 +29,7 @@ export default class FilterPresenter {
     });
 
     if (prevFilterComponent === null) {
-      render(this.#filterComponent, this.#filterContainer);
+      render(this.#filterComponent, this.#filterContainer, RenderPosition.AFTERBEGIN);
       return;
     }
 
@@ -41,7 +41,7 @@ export default class FilterPresenter {
     const points = this.#pointsModel.points;
     return Object.values(FilterType).map((type) => ({
       type,
-      count: filter[type](points).length
+      count: getFilterPoints(points, type).length
     }));
   }
 
